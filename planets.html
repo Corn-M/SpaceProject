@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="stylesheet_planets.css">
         <title>Planetary Model</title>
     </head>
-    <body onload='run(); init();'>
+    <body onload='run(); init(); running=true;'>
         <header>
             <h1>Create Your Own Solar System!</h1>
         </header>
@@ -29,7 +29,8 @@
 
         <div class="float-left center-col">
             <div id="clicktoaddplanet" class="holder">
-                <h3 class="bolded">Click to add planet!</h3><br>
+                <h4 class="bolded">Click on the black area to add new planets with the following initial conditions!</h4>
+                <p>You can also add planets manually below!</p><br>
                 <table class="table">
                     <thead class="thead-light"><tr>
                         <th>Initial Velocity</th>
@@ -714,6 +715,9 @@
                     if (runCount == 10) {
                         if ((runTotal/10 > 10) && skipVal > 1) {
                             skipVal --;
+                        }
+                        if (runTotal/10 < .4) {
+                            skipVal ++;
                         }
                         runTotal = 0;
                         runCount = 0;
