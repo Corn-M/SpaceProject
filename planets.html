@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="stylesheet_planets.css">
+        <title>Planetary Model</title>
+    </head>
+    <body onload='run(); init();'>
+        <header>
+            <h1>Create Your Own Solar System!</h1>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row heading">
+                <div class="col-md-3 col-sm-12">
+                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="planet_calc.html"><button type="button" class="btn btn-outline-light btn-block">Planet Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="star_calc.html"><button type="button" class="btn btn-outline-light btn-block">Star Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="black_hole_calc.html"><button type="button" class="btn btn-outline-light btn-block">Black Hole Calculations</button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-left center-col">
+            <div id="clicktoaddplanet" class="holder">
+                <h3 class="bolded">Click to add planet!</h3><br>
+                <table class="table">
+                    <thead class="thead-light"><tr>
+                        <th>Initial Velocity</th>
+                        <th>Color</th>
+                    </tr></thead>
+                    <tr id='rowclick'>
+                        <td><input type='number' style="width: 80px;" id='v0click' value=20> km/s</td>
+                        <td><select id = 'colclick' onchange="changeColor(this);">
+                            <option value = "#000000">Black</option>
+                            <option value = "#FF69B4">Pink</option>
+                            <option value = "#FF0000">Red</option>
+                            <option value = "#FFA500">Orange</option>
+                            <option value = "#FFFF00">Yellow</option>
+                            <option value = "#228B22">Green</option>
+                            <option value = "#00FFFF">Aqua</option>
+                            <option value = "#0000FF">Blue</option>
+                            <option value = "#9370DB">Violet</option>
+                            <option value = "#800080">Purple</option>
+                        </select></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="holder buttons">
+                <input type='button' class="btn btn-primary btn-lg" onclick='running=!running;' value='Pause/Play'>
+                <input type='button' class="btn btn-secondary btn-lg" onclick='preset("earth");' value='Reset'>
+                <!--<td></td><td><input type='button' class="btn btn-secondary" onclick='rec();' value='Log'></td>-->
+            </div>
+        </div>
+
+        <div class="float-right canvasHolder">
+            <canvas class="canvas" id="c0" width="650" height="650" style="border:1px solid #d3d3d3;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+
+            <canvas class="canvas" id="c1" width="650" height="650" style="border:1px solid #d3d3d3;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+
+            <canvas class="canvas" id="c_back" width="650" height="650" style="border:1px solid #d3d3d3;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+        </div>
+
+        <div class="holder float-left response-holder">
+            <div class="response-top">
+                Presets: &ensp;
+                <select id = 'presets'>
+                    <option value = "earth">Earth/Sun System (Default)</option>
+                    <option value = "solarsys">Solar System</option>
+                    <option value = "innersolarsys">Inner Planets</option>
+                    <option value = "exsolarsys">Expanded Solar System</option>
+                </select>  &ensp;
+                <td><input type='button' class="btn btn-outline-primary btn-sm" onclick='preset(document.getElementById("presets").value);' value='Load'></td>
+                <input type='button' class="btn btn-secondary float-right" onclick='resetCanvas();' value='Initialize'>
+                <br><br>
+                <div style="clear: both;">
+                    Central Star Mass&emsp;<input type='number' style="width: 80px;" id='ms' onchange='updateVal();' value=1> solar masses
+                </div>
+            </div>
+            <br>
+
+            <table class="table" id="response">
+                <thead class="thead-light center-col"><tr>
+                    <th>Planet</th>
+                    <th>Initial Radius</th>
+                    <th>Initial Velocity</th>
+                    <th>Color</th>
+                    <th>Show</th>
+                    <th></th>
+                </tr></thead>
+                <tr id='row1' class="center-col">
+                    <td class="bolded" id='name1'>1</td>
+                    <td><input type='number' style="width: 80px;" id='r1' onchange='init();' value=1> au</td>
+                    <td><input type='number' style="width: 80px;" id='v01' onchange='init();' value=30> km/s</td>
+                    <td><select id = 'col1' onchange="changeColor(this); init();">
+                        <option value = "#000000">Black</option>
+                        <option value = "#FF69B4">Pink</option>
+                        <option value = "#FF0000">Red</option>
+                        <option value = "#FFA500">Orange</option>
+                        <option value = "#FFFF00">Yellow</option>
+                        <option value = "#228B22">Green</option>
+                        <option value = "#00FFFF">Aqua</option>
+                        <option value = "#0000FF">Blue</option>
+                        <option value = "#9370DB">Violet</option>
+                        <option value = "#800080">Purple</option>
+                    </select></td>
+                    <td><input type='checkbox' id='s1' class="center-col" onchange='init();' checked></td>
+                    <td><button type="button" id='close1' class="close" onclick='remove(this, false);' aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button></td>
+                </tr>
+            </table>
+
+            <input type='button' class="btn btn-outline-primary response-bot" onclick='addInput(1.5, 24, "#000000", true);' value='Add Planet'>
+        </div>
+
+        <div class="float-right canvasSettings holder">
+            <table>
+                <tr><td>Width/Height&emsp;<input type='number' id='wh' style="width: 80px;"  onchange='updateVal();' value=5> au</td></tr>
+                <tr><td>Plot Trajectory&emsp;<input type='checkbox' id='tra' onchange='updateVal();' checked></td></tr>
+            </table>
+        </div>
+
+
+        <script type="text/javascript">
+            const canvasSize = 650;
+
+            var colors = [];
+
+            colors.push({col: "#000000", back_col: "#D6D6D6"});
+            colors.push({col: "#FF69B4", back_col: "#FFC0CB"});
+            colors.push({col: "#FF0000", back_col: "#FFADAD"});
+            colors.push({col: "#FFA500", back_col: "#FFD6A5"});
+            colors.push({col: "#FFFF00", back_col: "#FDFFB6"});
+            colors.push({col: "#228B22", back_col: "#CAFFBF"});
+            colors.push({col: "#00FFFF", back_col: "#C5FAFF"});
+            colors.push({col: "#0000FF", back_col: "#A0C4FF"});
+            colors.push({col: "#9370DB", back_col: "#C2ADEB"});
+            colors.push({col: "#800080", back_col: "#EDAEFE"});
+
+            var earthsundata = [{name: "1", r: "1", v0: "30", col: "#0000FF"}];
+
+            var innerplanetsdata = [];
+            var solarsysdata = [];
+            var exsolarsysdata = [];
+
+            innerplanetsdata.push({name: "Mercury", r: "0.3075", v0: "58.98", col: "#FFA500"});
+            innerplanetsdata.push({name: "Venus", r: "0.7185", v0: "35.26", col: "#FFFF00"});
+            innerplanetsdata.push({name: "Earth", r: "0.9832", v0: "30.29", col: "#0000FF"});
+            innerplanetsdata.push({name: "Mars", r: "1.381", v0: "26.50", col: "#FF0000"});
+
+            solarsysdata = [...innerplanetsdata];
+
+            solarsysdata.push({name: "Jupiter", r: "4.950", v0: "13.72", col: "#FF69B4"});
+            solarsysdata.push({name: "Saturn", r: "9.041", v0: "10.18", col: "#000000"});
+            solarsysdata.push({name: "Uranus", r: "18.32", v0: "7.11", col: "#228B22"});
+            solarsysdata.push({name: "Neptune", r: "29.71", v0: "5.50", col: "#00FFFF"});
+
+            exsolarsysdata = [...solarsysdata];
+
+            exsolarsysdata.push({name: "Pluto", r: "29.66", v0: "6.10", col: "#800080"});
+            exsolarsysdata.push({name: "Halley's Comet", r: "35.43", v0: "1", col: "#9370DB"});
+
+            var countBox = 1;
+            var pbxs = [];
+            var planetRow = {};
+
+            pbxs.push({nn: "name1", rn: "r1", vn: "v01", cn: "col1", sn: "s1"});
+
+            var position = {x: 0, y: 0};
+            var cnvs0 = document.getElementById('c0');
+            var ctx0 = cnvs0.getContext('2d');
+
+            var position = {x: 0, y: 0};
+            var cnvs = document.getElementById('c1');
+            var width = cnvs.width;
+            var height = cnvs.height;
+            var ctx = cnvs.getContext('2d');
+
+            ctx.font = "bold 16px Arial";
+
+            var position = {x: 0, y: 0};
+            var cnvs_back = document.getElementById('c_back');
+            var ctx_back = cnvs0.getContext('2d');
+
+            var mousex = 0;
+            var mousey = 0;
+
+            var ttime = 0;
+
+            var runCount = 0;
+            var runTotal = 0;
+
+            var minX = -2.5;
+            var maxX = 2.5;
+            var minY = -2.5;
+            var maxY = 2.5;
+
+            var sunR = .15;
+            var planR =.035;
+
+            const G = 6.67408e-11;
+            var running = true;
+            var traj = true;
+
+            var dtVal = .5;
+            var dt = daytos(dtVal);
+            var skipVal = 2;
+
+            var ms = smtokg(1);
+
+            var xs = 0;
+            var ys = 0;
+
+            var maxStep = 0.2;
+
+            var ps = [];
+            var p = {};
+
+            var disabled = false;
+
+
+            function Px(x) {
+                return width*(x-minX)/(maxX-minX);
+            }
+            function Py(y) {
+                return height*(maxY-y)/(maxY-minY);
+            }
+
+            function sunRad(r) {
+                return (r/maxX)*(canvasSize*.6);
+            }
+
+            function autom(rau) {
+                return rau*1.496e11;
+            }
+            function mtoau(rm) {
+                return rm/1.496e11;
+            }
+
+            function kmstoms(vkms) {
+                return vkms*1000;
+            }
+            function mstokms(vms) {
+                return vms/1000;
+            }
+
+            function smtokg(msm) {
+                return msm*1.989e30;
+            }
+
+            function daytos(tday) {
+                return tday*86400;
+            }
+            function stoyrs(ts) {
+                return ts/3.154e7;
+            }
+
+            function round(num) {
+                return Math.round(num*100)/100;
+            }
+
+
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('row1').style.backgroundColor = "#A0C4FF";
+                document.getElementById('row1').style.borderBottom = "medium solid blue";
+                document.getElementById('col1').value = "#0000FF";
+                document.getElementById('rowclick').style.backgroundColor = "#FFADAD";
+                document.getElementById('rowclick').style.borderBottom = "medium solid red";
+                document.getElementById('colclick').value = "#FF0000";
+            });
+
+            cnvs_back.addEventListener('click', e => {
+                mousex = ((e.offsetX-(canvasSize/2))/canvasSize)*(maxX-minX);
+                mousey = ((-e.offsetY+(canvasSize/2))/canvasSize)*(maxY-minY);
+
+                rclick = Math.sqrt(mousex*mousex + mousey*mousey);
+                v0click = document.getElementById('v0click').value;
+                colclick = document.getElementById('colclick').value;
+
+                addInput(rclick, v0click, colclick, false);
+            });
+
+
+            const k = '<option value = "#000000">Black</option>';
+            const m = '<option value = "#FF69B4">Pink</option>';
+            const red = '<option value = "#FF0000">Red</option>';
+            const o = '<option value = "#FFA500">Orange</option>';
+            const y = '<option value = "#FFFF00">Yellow</option>';
+            const g = '<option value = "#228B22">Green</option>';
+            const a = '<option value = "#00FFFF">Aqua</option>';
+            const b = '<option value = "#0000FF">Blue</option>';
+            const i = '<option value = "#9370DB">Violet</option>';
+            const v = '<option value = "#800080">Purple</option>';
+
+            function addInput(rvalue, vvalue, colvalue, button) {
+                if (pbxs.length < 10) {
+                    var rows = [];
+                    var row = {};
+
+                    for (var j = 0; j < pbxs.length; j++) {
+                        row = {};
+
+                        row.v0 = document.getElementById(pbxs[j].vn).value;
+                        row.r = document.getElementById(pbxs[j].rn).value;
+                        row.s = document.getElementById(pbxs[j].sn).checked;
+                        row.c = document.getElementById(pbxs[j].cn).value;
+
+                        rows.push(row);
+                    }
+
+                    planetRow = {};
+
+                    countBox += 1;
+                    var rowName = "row" + countBox;
+                    var nName = "name" + countBox;
+                    var rName = "r" + countBox;
+                    var vName = "v0" + countBox;
+                    var cName = "col" + countBox;
+                    var sName = "s" + countBox;
+                    var closeName = "close" + countBox;
+                    document.getElementById('response').innerHTML += '<tr id="'+rowName+'" class="center-col">' +
+                                                                     '<td class="bolded" id="'+nName+'">'+countBox+'</td>' +
+                                                                     '<td><input type="number" style="width: 80px;" id="'+rName+'" onchange="init();" value="'+rvalue+'"> au</td>' +
+                                                                     '<td><input type="number" style="width: 80px;" id="'+vName+'" onchange="init();" value="'+vvalue+'"> km/s</td>' +
+                                                                     '<td><select id = "'+cName+'" onchange="changeColor(this); init();">'+k+m+red+o+y+g+a+b+i+v+'</select></td>' +
+                                                                     '<td><input type="checkbox" id="'+sName+'" onchange="init();" checked></td>' +
+                                                                     '<td><button type="button" id="'+closeName+'" class="close" onclick="remove(this, false);" aria-label="Close">'+
+                                                                     '<span aria-hidden="true">&times;</span></button></td></tr>';
+
+                    document.getElementById(cName).value = colvalue;
+                    changeColor(document.getElementById(cName));
+
+                    if (running) {
+                        document.getElementById(rName).disabled = true;
+                        document.getElementById(vName).disabled = true;
+                        document.getElementById(cName).disabled = true;
+                        document.getElementById(sName).disabled = true;
+                        document.getElementById(closeName).disabled = true;
+                    }
+
+                    for (var j = 0; j < rows.length; j++) {
+                        document.getElementById(pbxs[j].vn).value = rows[j].v0;
+                        document.getElementById(pbxs[j].rn).value = rows[j].r;
+                        document.getElementById(pbxs[j].sn).checked = rows[j].s;
+                        document.getElementById(pbxs[j].cn).value = rows[j].c;
+                    }
+
+                    planetRow.nn = nName;
+                    planetRow.rn = rName;
+                    planetRow.vn = vName;
+                    planetRow.cn = cName;
+                    planetRow.sn = sName;
+
+                    pbxs.push(planetRow);
+
+                    updatePlanet(button);
+                }
+            }
+
+            function updatePlanet(button) { // Add newest planet while running
+                ms = smtokg(eval(document.getElementById('ms')).value);
+                dt = daytos(dtVal);
+                traj = document.getElementById('tra').checked;
+
+                if (button) {
+                    initp(pbxs[pbxs.length-1]);
+                } else {
+                    p = {};
+                    var velocity0 = eval(document.getElementById(pbxs[pbxs.length-1].vn).value);
+                    p.s = true;
+                    p.c = document.getElementById(pbxs[pbxs.length-1].cn).value;
+
+                    p.xn = autom(mousex);
+                    p.yn = autom(mousey);
+                    p.x = p.xn;
+                    p.y = p.yn;
+
+                    if (p.x > 0) {
+                        p.vx = -kmstoms(velocity0*Math.sin(Math.atan(p.y/p.x)));
+                        p.vy = kmstoms(velocity0*Math.cos(Math.atan(p.y/p.x)));
+                    } else {
+                        p.vx = kmstoms(velocity0*Math.sin(Math.atan(p.y/p.x)));
+                        p.vy = -kmstoms(velocity0*Math.cos(Math.atan(p.y/p.x)));
+                    }
+
+                    p.run = true;
+
+                    ps.push(p);
+                }
+
+                for (var i = 0; i < ps.length; i++) {
+                    if (ps[i].s) {
+                        if (ps[i].run) {
+                            draw(ps[i]);
+                        }
+                    }
+                }
+            }
+
+            function updateVal() {
+                ms = smtokg(eval(document.getElementById('ms').value));
+                traj = document.getElementById('tra').checked;
+
+                if (whVal != eval(document.getElementById('wh').value)) {
+                    whVal = eval(document.getElementById('wh').value);
+                    minX = -whVal/2;
+                    maxX = whVal/2;
+                    minY = minX;
+                    maxY = maxX;
+
+                    ctx0.clearRect(0,0,width,height);
+                    ctx.clearRect(0,0,width,height);
+
+                    ctx_back.fillStyle = "#0A0A0A";
+                    ctx_back.fillRect(0, 0, width, height);
+                    ctx_back.shadowColor = "#FFFF00" // string
+                    ctx_back.shadowBlur = 666*sunR; // integer
+
+                    ctx0.beginPath();
+                    ctx0.strokeStyle = "#FFFF00";
+                    ctx0.arc(Px(xs),Py(ys),sunRad(sunR),0, Math.PI*2.);
+                    ctx0.fillStyle = "#FFFF00";
+                    ctx0.fill();
+                    ctx0.stroke();
+                }
+            }
+
+            function changeColor(selector) {
+                color = selector.value;
+                background_color = "#FFFFFF";
+                rowid = "row" + selector.id.substring(3);
+
+                for (var i = 0; i < colors.length; i++) {
+                    if (colors[i].col == color) {
+                        background_color = colors[i].back_col;
+                    }
+                }
+
+                document.getElementById(rowid).style.backgroundColor = background_color;
+                document.getElementById(rowid).style.borderBottom = "medium solid " + color;
+            }
+
+            /* Setting up the plot  ---------------------------- */
+
+            function remove(closebutton, clearEverything) {
+                if ((pbxs.length > 1) || clearEverything) {
+                    rownum = closebutton.id.substring(5);
+                    document.getElementById("row" + rownum).remove();
+
+                    pbxs.splice(rownum-1, 1);
+                    countBox -= 1;
+
+                    for (var j = rownum-1; j < pbxs.length; j++) {
+                        document.getElementById("row" + (j+2)).id = "row" + (j+1);
+                        if (!isNaN(document.getElementById(pbxs[j].nn).innerHTML)) {
+                            document.getElementById(pbxs[j].nn).innerHTML = j+1;
+                        }
+                        document.getElementById(pbxs[j].nn).id = "name" + (j+1);
+                        document.getElementById(pbxs[j].rn).id = "r" + (j+1);
+                        document.getElementById(pbxs[j].vn).id = "v0" + (j+1);
+                        document.getElementById(pbxs[j].cn).id = "col" + (j+1);
+                        document.getElementById(pbxs[j].sn).id = "s" + (j+1);
+                        document.getElementById("close" + (j+2)).id = "close" + (j+1);
+
+                        pbxs[j].nn = "name" + (j+1);
+                        pbxs[j].rn = "r" + (j+1);
+                        pbxs[j].vn = "v0" + (j+1);
+                        pbxs[j].cn = "col" + (j+1);
+                        pbxs[j].sn = "s" + (j+1);
+                    }
+                }
+
+                init();
+            }
+
+            function load(data) {
+                for (var i = 0; i < data.length; i++) {
+                    addInput(data[i].r, data[i].v0, data[i].col, true);
+                    document.getElementById(pbxs[i].nn).innerHTML = data[i].name;
+                    changeColor(document.getElementById(pbxs[i].cn));
+                }
+
+                init();
+            }
+
+            function reset() {
+                for (var i = pbxs.length; i > 0; i--) {
+                    closebuttonid = "close" + i;
+                    remove(document.getElementById(closebuttonid), true);
+                }
+            }
+
+            function preset(presetValue) {
+                reset();
+
+                if (presetValue == "earth") {
+                    document.getElementById('ms').value = 1;
+                    document.getElementById('wh').value = 5;
+                    dtVal = .5;
+                    skipVal = 2;
+                    load(earthsundata);
+                }
+
+                if (presetValue == "innersolarsys") {
+                    document.getElementById('ms').value = 1;
+                    document.getElementById('wh').value = 5;
+                    dtVal = .5;
+                    skipVal = 2;
+                    load(innerplanetsdata);
+                }
+
+                else if (presetValue == "solarsys") {
+                    document.getElementById('ms').value = 1;
+                    document.getElementById('wh').value = 65;
+                    dtVal = 1;
+                    skipVal = 30;
+                    load(solarsysdata);
+                }
+
+                else if (presetValue == "exsolarsys") {
+                    document.getElementById('ms').value = 1;
+                    document.getElementById('wh').value = 72;
+                    dtVal = 1;
+                    skipVal = 30;
+                    load(exsolarsysdata);
+                }
+            }
+
+            function resetCanvas() {
+                init();
+                running = false;
+            }
+
+            // Initializing the problem -----------------------
+            function initp(pbx) {
+                p = {};
+                p.s = document.getElementById(pbx.sn).checked;
+                p.c = document.getElementById(pbx.cn).value;
+
+                p.vx = 0;
+                p.vy = kmstoms(eval(document.getElementById(pbx.vn).value));
+                p.xn = autom(eval(document.getElementById(pbx.rn).value));
+                p.yn = 0;
+                p.x = p.xn;
+                p.y = 0;
+
+                p.run = true;
+
+                ps.push(p);
+            }
+
+            function init() { // Initialize the solution
+                ctx0.clearRect(0,0,width,height); // Clears plotted data
+                ctx.clearRect(0,0,width,height); // Clears plotted data
+
+                ps = [];
+
+                ctx_back.fillStyle = "#0A0A0A";
+                ctx_back.fillRect(0, 0, width, height);
+                ctx_back.shadowColor = "#FFFF00" // string
+                ctx_back.shadowBlur = 666*sunR; // integer
+
+                ttime = 0;
+                ctx.fillStyle = "white";
+                ctx.fillText('Time = ' + round(stoyrs(ttime)) + 'yrs', 30, 30);
+
+                ms = smtokg(eval(document.getElementById('ms').value));
+                dt = daytos(dtVal);
+                traj = document.getElementById('tra').checked;
+
+                for (var i = 0; i < pbxs.length; i++) {
+                    initp(pbxs[i]);
+                }
+
+                running = false;
+
+                xs = 0;
+                ys = 0;
+
+                whVal = eval(document.getElementById('wh').value);
+                minX = -whVal/2;
+                maxX = whVal/2;
+                minY = minX;
+                maxY = maxX;
+
+                ctx0.beginPath();
+                ctx0.strokeStyle = "#FFFF00";
+                ctx0.arc(Px(xs),Py(ys),sunRad(sunR),0, Math.PI*2.);
+                ctx0.fillStyle = "#FFFF00";
+                ctx0.fill();
+                ctx0.stroke();
+
+                for (var i = 0; i < ps.length; i++) {
+                    if (ps[i].s) {
+                        if (ps[i].run) {
+                            draw(ps[i]);
+                        }
+                    }
+                }
+            }
+
+            function ac(x,m,rpow3) {
+                return -(G*m*x/rpow3);
+            }
+
+            function marchTime(p) { // March the solution for one time step
+                // p.x = x_n, p.xn = x_n+1
+                p.x = p.xn;
+                p.y = p.yn;
+
+                // Calculating the planet's distance to the sun
+                r = Math.sqrt(p.x*p.x+p.y*p.y);
+                r3 = r*r*r;
+
+                // Verlet's distance equation
+                p.xn = p.x + dt*(p.vx + .5*dt*ac(p.x,ms,r3));
+                p.yn = p.y + dt*(p.vy + .5*dt*ac(p.y,ms,r3));
+
+                // Recalculating the planet's distance to the sun
+                rn = Math.sqrt(p.xn*p.xn+p.yn*p.yn);
+                r3n = rn*rn*rn;
+
+                // Verlet's velocity equation
+                p.vx = p.vx + .5*dt*(ac(p.x,ms,r3)+ac(p.xn,ms,r3n));
+                p.vy = p.vy + .5*dt*(ac(p.y,ms,r3)+ac(p.yn,ms,r3n));
+
+                // Catches planet if it goes into the sun
+                if (mtoau(p.x) < xs+sunR && mtoau(p.x) > xs-sunR && mtoau(p.y) < ys+sunR && mtoau(p.y) > ys-sunR) {
+                    p.run = false;
+                }
+            }
+
+            function draw(p) { // draw the solution on the screen
+                ctx.beginPath();
+                if (p.c == '#000000') {
+                    ctx.strokeStyle = '#FFFFFF';
+                } else {
+                    ctx.strokeStyle = p.c;
+                }
+                ctx.arc(Px(mtoau(p.xn)), Py(mtoau(p.yn)), sunRad(planR), 0, Math.PI*2.);
+                ctx.fillStyle = p.c;
+                ctx.fill();
+                ctx.stroke();
+
+                if (traj) {
+                    ctx0.beginPath();
+                    if (p.c == '#000000') {
+                        ctx0.strokeStyle = '#FFFFFF';
+                    } else {
+                        ctx0.strokeStyle = p.c;
+                    }
+                    ctx0.moveTo(Px(mtoau(p.xn)), Py(mtoau(p.yn)));
+                    ctx0.lineTo(Px(mtoau(p.x)), Py(mtoau(p.y)));
+                    ctx0.stroke();
+                }
+            }
+
+            function rec() { // draw the solution on the screen
+                for (var i = 0; i < ps.length; i++) {
+                    curRad = Math.sqrt(ps[i].x*ps[i].x+ps[i].y*ps[i].y);
+                    curV = Math.sqrt(ps[i].vx*ps[i].vx+ps[i].vy*ps[i].vy);
+                    console.log({time: round(stoyrs(ttime)), radius: mtoau(curRad), velocity: mstokms(curV)})
+                }
+            }
+
+            function run() {
+                ctx.beginPath();
+                if (running) {
+                    var t0 = performance.now();
+
+                    if (!disabled) {
+                        for (var i = 0; i < pbxs.length; i++) {
+                            document.getElementById(pbxs[i].vn).disabled = true;
+                            document.getElementById(pbxs[i].rn).disabled = true;
+                            document.getElementById(pbxs[i].sn).disabled = true;
+                            document.getElementById(pbxs[i].cn).disabled = true;
+                            document.getElementById("close" + (i+1)).disabled = true;
+                        }
+                        disabled = true;
+                    }
+
+                    for(var j = 0; j < skipVal; j++) {
+                        for (var i = 0; i < ps.length; i++) {
+                            marchTime(ps[i]);
+                        }
+                        ttime += dt;
+                        ctx.clearRect(0,0,width,height); // Clears plotted data
+                        for (var i = 0; i < ps.length; i++) {
+                            if (ps[i].s) {
+                                if (ps[i].run) {
+                                    draw(ps[i]);
+                                }
+                            }
+                        }
+                        ctx.fillStyle = "white";
+                        ctx.fillText('Time = ' + round(stoyrs(ttime)) + 'yrs', 10, 20);
+                    }
+
+                    var t1 = performance.now();
+                    runTotal += (t1 - t0);
+                    runCount++;
+
+                    if (runCount == 10) {
+                        if ((runTotal/10 > 10) && skipVal > 1) {
+                            skipVal --;
+                        }
+                        runTotal = 0;
+                        runCount = 0;
+                    }
+                } else if (disabled) {
+                    for (var i = 0; i < pbxs.length; i++) {
+                        document.getElementById(pbxs[i].vn).disabled = false;
+                        document.getElementById(pbxs[i].rn).disabled = false;
+                        document.getElementById(pbxs[i].sn).disabled = false;
+                        document.getElementById(pbxs[i].cn).disabled = false;
+                        document.getElementById("close" + (i+1)).disabled = false;
+                    }
+                    disabled = false;
+                }
+
+                // setTimeout(run, getNum('wait'));
+                setTimeout(run);
+
+            }
+
+            init();    // Initialize the problem
+            run();     // Run the infinite loop
+        </script>
+    </body>
+</html>

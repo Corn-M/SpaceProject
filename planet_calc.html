@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="stylesheet_planets.css">
+        <title>Planetary Calculations</title>
+
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </head>
+    <body onload="drawPlanet(1, img_earth); calculate();">
+        <header>
+            <h1>Create Your Own Planet!</h1>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row form-group heading">
+                <div class="col-md-3 col-sm-12">
+                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="planet_calc.html"><button type="button" class="btn btn-outline-light btn-block">Planet Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="star_calc.html"><button type="button" class="btn btn-outline-light btn-block">Star Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="black_hole_calc.html"><button type="button" class="btn btn-outline-light btn-block">Black Hole Calculations</button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="planet-holder">
+            <div class="float-right">
+                <div class="canvasHolderImage">
+
+                    <canvas class="canvas" id="c_back" width="550" height="550" style="border:0px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+
+                    <canvas class="canvas" id="c0" width="550" height="550" style="border:0px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+
+                    <canvas class="canvas" id="c_text" width="550" height="550" style="border:1px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+                </div>
+                <div class="canvasHolderImage" style="height: 50px; width: 500px; margin-right: 0px; margin-top: 0px;">
+
+                    <canvas class="canvas" id="c_line" width="550" height="50" style="border:0px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+                </div>
+                <div class="holder buttons" style="margin-left: 140px; width: 265px;">
+                    <input type='button' class="btn btn-outline-primary btn-lg" onclick="calculate();" value='Calculate'>&emsp;
+                    <input type='button' class="btn btn-outline-secondary btn-lg" onclick="reset();" value='Reset'>
+                </div>
+            </div>
+
+            <div class="float-left holder planet-calc" style="padding-left: 30px; padding-right: 30px;">
+                <h3 class="center-col bolded">Enter information about your planet</h3>
+                <p class="center-col" style="font-size: 14px;">
+                    Enter some characteristics about your planet and click calculate to see what properties those values can calculate and what your planet
+                    might look like!
+                </p>
+                <p class="center-col" style="font-size: 14px;">
+                    The groups of characteristics needed to calculate a property automatically are highlighted when you select it and suggested values
+                    are provided for manual entry.
+                </p><br>
+                <p>
+                    <!-- <input type='checkbox' id='massChk' style="width: auto;"> -->
+                    Mass&emsp;
+                    <input type='number' min="0" step="any" id='massTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> M⊕
+                    <i id='massSuggest'>&ensp;0.05 - 400 M⊕</i>
+                </p>
+                <div class="expand" id="massEx" style="background-color: #FFFFFFAA;">
+                    <p>Mass compared to Earth's mass&ensp;<strong>(Earth = 1M⊕, Jupiter = 318M⊕)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='radiusChk' style="width: auto;"> -->
+                    Radius&emsp;
+                    <input type='number' min="0" step="any" id='radiusTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> R⊕
+                    <i id='radiusSuggest'>&ensp;0.3 - 20 R⊕</i>
+                </p>
+                <div class="expand" id="radiusEx" style="background-color: #FFFFFFAA;">
+                    <p>Radius compared to Earth's radius&ensp;<strong>(Earth = 1R⊕, Jupiter = 11.2R⊕)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='densityChk' style="width: auto;"> -->
+                    Density&emsp;
+                    <input type='number' min="0" step="any" id='densityTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> g/cm<sup>3</sup>
+                    <i id='densitySuggest'>&ensp;0.5 - 6 g/cm<sup>3</sup></i>
+                </p>
+                <div class="expand" id="densityEx" style="background-color: #FFFFFFAA;">
+                    <p>Mass/volume; Gas/ice giants are less dense&ensp;<strong>(Earth = 5.51g/cm<sup>3</sup> Jupiter = 1.33g/cm<sup>3</sup>)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='gravityChk' style="width: auto;"> -->
+                    Surface Gravity&emsp;
+                    <input type='number' min="0" step="any" id='gravityTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> m/s<sup>2</sup>
+                    <i id='gravitySuggest'>&ensp;3 - 26 m/s<sup>2</sup></i>
+                </p>
+                <div class="expand" id="gravityEx" style="background-color: #FFFFFFAA;">
+                    <p>How strong gravitational pull is on the surface&ensp;<strong>(Earth = 9.8m/s<sup>2</sup> Jupiter = 23.1m/s<sup>2</sup>)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='orbitRadSatChk' style="width: auto;"> -->
+                    Orbital Radius of a Satellite&emsp;
+                    <input type='number' min="1000" step="any" id='orbitRadSatTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> km
+                    <i id='orbitRadSatSuggest'>&ensp;8,000 - 20,000,000 km</i>
+                </p>
+                <div class="expand" id="orbitRadSatEx" style="background-color: #FFFFFFAA;">
+                    <p>How far a moon is from the planet's center&ensp;<strong>(Earth = 300,000km Jupiter = 421,700km)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='periodSatChk' style="width: auto;"> -->
+                    Period of a Satellite&emsp;
+                    <input type='number' min=".1" step="any" id='periodSatTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> days
+                    <i id='periodSatSuggest'>&ensp;0.3 - 1,000 days</i>
+                </p>
+                <div class="expand" id="periodSatEx" style="background-color: #FFFFFFAA;">
+                    <p>How long it takes a moon to orbit the planet&ensp;<strong>(Earth = 27.3km Jupiter = 1.77km)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='brightDropChk' style="width: auto;"> -->
+                    Drop in Star Brightness During Transit&emsp;
+                    <input type='number' min="0" max="10" step="any" id='brightDropTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> %
+                    <i id='brightDropSuggest'>&ensp;0.001% - 3%</i>
+                </p>
+                <div class="expand" id="brightDropEx" style="background-color: #FFFFFFAA;">
+                    <p>Amount star brightness decreases when the planet is blocking it&ensp;<strong>(Earth = 0.008%)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='sRadiusChk' style="width: auto;"> -->
+                    Mass of Host Star&emsp;
+                    <input type='number' min="0" step="any" id='sMassTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> M&#9737;
+                    <i id='sMassSuggest'>&ensp;0.1 - 250 M&#9737;</i>
+                </p>
+                <div class="expand" id="sMassEx" style="background-color: #FFFFFFAA;">
+                    <p>Mass of the host star compared to the sun&ensp;<strong>(Sun = 1M&#9737;)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='sRadiusChk' style="width: auto;"> -->
+                    Radius of Host Star&emsp;
+                    <input type='number' min="0" step="any" id='sRadiusTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> R&#9737;
+                    <i id='sRadiusSuggest'>&ensp;0.05 - 100 R&#9737;</i>
+                </p>
+                <div class="expand" id="sRadiusEx" style="background-color: #FFFFFFAA;">
+                    <p>Radius of the host star compared to the sun&ensp;<strong>(Sun = 1R&#9737;)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='sTempChk' style="width: auto;"> -->
+                    Temperature of Host Star&emsp;
+                    <input type='number' min="2400" step="any" id='sTempTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> K
+                    <i id='sTempSuggest'>&ensp;2,400 - 40,000K</i>
+                </p>
+                <div class="expand" id="sTempEx" style="background-color: #FFFFFFAA;">
+                    <p>Temperature of the star the planet orbits&ensp;<strong>(Sun = 5800K)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='tempChk' style="width: auto;"> -->
+                    Expected Temperature&emsp;
+                    <input type='number' step="any" id='tempTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> °F
+                    <i id='tempSuggest'>&ensp;-400 - 500 °F</i>
+                </p>
+                <div class="expand" id="tempEx" style="background-color: #FFFFFFAA;">
+                    <p>Temperature without an atmosphere; colder than actual temperature&ensp;<strong>(Earth = -2.47°F)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='albedoChk' style="width: auto;"> -->
+                    Albedo&emsp;
+                    <input type='number' step="any" min="0" max="100" id='albedoTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> %
+                    <i id='albedoSuggest'>&ensp;10% - 75%</i>
+                </p>
+                <div class="expand" id="albedoEx" style="background-color: #FFFFFFAA;">
+                    <p>Percentage of light the planet's surface reflects&ensp;<strong>(Earth = 31% Venus = 77%)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='orbitRadChk' style="width: auto;"> -->
+                    Orbital Radius&emsp;
+                    <input type='number' min="0" step="any" id='orbitRadTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> AU
+                    <i id='orbitRadSuggest'>&ensp;0.3 - 40 AU</i>
+                </p>
+                <div class="expand" id="orbitRadEx" style="background-color: #FFFFFFAA;">
+                    <p>Distance from planet to the star it orbits&ensp;<strong>(Earth = 1AU Neptune = 19.2AU)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='orbitRadChk' style="width: auto;"> -->
+                    Orbital Period&emsp;
+                    <input type='number' min="0" step="any" id='periodTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> years
+                    <i id='periodSuggest'>&ensp;0.03 - 250 years</i>
+                </p>
+                <div class="expand" id="periodEx" style="background-color: #FFFFFFAA;">
+                    <p>Time it takes for planet to orbit host star&ensp;<strong>(Earth = 1 year Neptune = 164.8 years)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='distanceChk' style="width: auto;"> -->
+                    Distance from Earth&emsp;
+                    <input type='number' min="0" step="any" id='distanceTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> ly
+                    <i id='distanceSuggest'>&ensp;4 - 30,000 ly</i>
+                </p>
+                <div class="expand" id="distanceEx" style="background-color: #FFFFFFAA;">
+                    <p>Distance from Earth to a distant planet&ensp;<strong>(Kepler-452 b = 1,402ly)</strong></p>
+                </div>
+                <p>
+                    <!-- <input type='checkbox' id='parallaxChk' style="width: auto;"> -->
+                    Parallax Angle&emsp;
+                    <input type='number' step="any" id='parallaxTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> "
+                    <i id='parallaxSuggest'>&ensp;0.0001 - 0.8"</i>
+                </p>
+                <div class="expand" id="parallaxEx" style="background-color: #FFFFFFAA;">
+                    <p>Change in position in Earth's sky over 6 months&ensp;<strong>(Kepler-452 b = 0.0023")</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="holder info">
+            <h2 class="center-col bolded">Notes</h2>
+            <div class="holder" style="background-color: #FFFFFFAA; margin: 50px;">
+                <h4 class="bolded">Planet Characteristics</h4>
+                <table class="table">
+                    <th>Characteristic</th>
+                    <th>Mercury</th>
+                    <th>Venus</th>
+                    <th>Earth</th>
+                    <th>Mars</th>
+                    <th>Jupiter</th>
+                    <th>Saturn</th>
+                    <th>Uranus</th>
+                    <th>Neptune</th>
+                    <th>Kepler-<br>452 b</th>
+                    <tr>
+                        <th>Mass (M⊕)</th>
+                        <td>0.06</td>
+                        <td>0.82</td>
+                        <td>1</td>
+                        <td>0.11</td>
+                        <td>318</td>
+                        <td>95.2</td>
+                        <td>14.5</td>
+                        <td>17.1</td>
+                        <td>3.29</td>
+                    </tr>
+                    <tr>
+                        <th>Radius (R⊕)</th>
+                        <td>0.38</td>
+                        <td>0.95</td>
+                        <td>1</td>
+                        <td>0.53</td>
+                        <td>11.2</td>
+                        <td>9.45</td>
+                        <td>4.01</td>
+                        <td>3.88</td>
+                        <td>1.63</td>
+                    </tr>
+                    <tr>
+                        <th>Density (g/cm<sup>3</sup>)</th>
+                        <td>5.42</td>
+                        <td>5.24</td>
+                        <td>5.51</td>
+                        <td>3.93</td>
+                        <td>1.33</td>
+                        <td>0.69</td>
+                        <td>1.27</td>
+                        <td>1.64</td>
+                        <td>4.19</td>
+                    </tr>
+                    <tr>
+                        <th>Surface<br>Gravity (m/s<sup>2</sup>)</th>
+                        <td>3.7</td>
+                        <td>8.9</td>
+                        <td>9.8</td>
+                        <td>3.7</td>
+                        <td>23.1</td>
+                        <td>9.0</td>
+                        <td>8.7</td>
+                        <td>11.0</td>
+                        <td>12.2</td>
+                    </tr>
+                    <tr>
+                        <th>Satellite Orbital<br>Radius (km)</th>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>384,000</td>
+                        <td>9,375</td>
+                        <td>421,700</td>
+                        <td>1,221,870</td>
+                        <td>436,000</td>
+                        <td>354,759</td>
+                        <td>Unknown</td>
+                    </tr>
+                    <tr>
+                        <th>Satellite<br>Period (days)</th>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>27.3</td>
+                        <td>0.32</td>
+                        <td>1.77</td>
+                        <td>15.95</td>
+                        <td>8.70</td>
+                        <td>5.88</td>
+                        <td>Unknown</td>
+                    </tr>
+                    <tr>
+                        <th>Star Brightness Drop</th>
+                        <td>0.001%</td>
+                        <td>0.007%</td>
+                        <td>0.008%</td>
+                        <td>0.002%</td>
+                        <td>1.05%</td>
+                        <td>0.75%</td>
+                        <td>0.13%</td>
+                        <td>0.13%</td>
+                        <td>0.018%</td>
+                    </tr>
+                    <tr>
+                        <th>Star Mass (M&#9737;)</th>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0.80</td>
+                    </tr>
+                    <tr>
+                        <th>Star Radius (R&#9737;)</th>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1.11</td>
+                    </tr>
+                    <tr>
+                        <th>Star Temperature (K)</th>
+                        <td>5,778</td>
+                        <td>5,778</td>
+                        <td>5,778</td>
+                        <td>5,778</td>
+                        <td>5,778</td>
+                        <td>5,778</td>
+                        <td>5,778</td>
+                        <td>5,778</td>
+                        <td>5,757</td>
+                    </tr>
+                    <tr>
+                        <th>Expected<br>Temperature (°F)</th>
+                        <td>331.61</td>
+                        <td>-51.79</td>
+                        <td>-2.47</td>
+                        <td>-82.03</td>
+                        <td>-261.85</td>
+                        <td>-313.87</td>
+                        <td>-355.09</td>
+                        <td>-375.79</td>
+                        <td>Unknown</td>
+                    </tr>
+                    <tr>
+                        <th>Albedo</th>
+                        <td>6.8%</td>
+                        <td>77%</td>
+                        <td>31%</td>
+                        <td>25%</td>
+                        <td>34%</td>
+                        <td>34%</td>
+                        <td>30%</td>
+                        <td>29%</td>
+                        <td>Unknown</td>
+                    </tr>
+                    <tr>
+                        <th>Orbital Radius (AU)</th>
+                        <td>0.39</td>
+                        <td>0.72</td>
+                        <td>1</td>
+                        <td>1.52</td>
+                        <td>5.20</td>
+                        <td>9.58</td>
+                        <td>19.2</td>
+                        <td>30.0</td>
+                        <td>1.05</td>
+                    </tr>
+                    <tr>
+                        <th>Orbital Period (years)</th>
+                        <td>0.241</td>
+                        <td>0.615</td>
+                        <td>1</td>
+                        <td>1.88</td>
+                        <td>11.9</td>
+                        <td>29.4</td>
+                        <td>83.7</td>
+                        <td>164</td>
+                        <td>0.0366</td>
+                    </tr>
+                    <tr>
+                        <th>Distance (ly)</th>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>1,402</td>
+                    </tr>
+                    <tr>
+                        <th>Parallax</th>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>0.0023"</td>
+                    </tr>
+                    <tr>
+                        <th>Habitable Zone</th>
+                        <td>No</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>No</td>
+                        <td>No</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="container-fluid" align="center">
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Mass (\(m\))</h4>
+                            <p>The mass of the planet.</p>
+                            <p>The units are in M⊕, which means mass in relation to Earth's mass.</p>
+                            <br><p class="bolded">Equations:
+                            \[m=\rho r^3{4 \over 3}\pi\]</p><p class="small">Mass/Volume</p>
+                            \[m={r^2g \over G}\]<p class="small">Newton’s Law of Gravity</p>
+                            \[m={4\pi^2 \over G}{{a_{sat}}^3 \over {P_{sat}}^2}\]<p class="small">Kepler’s Third Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Radius (\(r\))</h4>
+                            <p>The radius of the planet.</p>
+                            <p>The units are in R⊕, which means radius in relation to Earth's radius.</p>
+                            <p></p>
+                            <br><p class="bolded">Equations:
+                            \[r=\sqrt{D} R\]</p><p class="small">Transit Curve</p>
+                            \[r=\sqrt{Gm \over g}\]<p class="small">Newton’s Law of Gravity</p>
+                            \[r=\sqrt[3]{{m \over \rho}{3 \over 4\pi}}\]<p class="small">Mass/Volume</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Density (\(\rho\))</h4>
+                            <p>The density of the planet.</p>
+                            <p>The density is the ratio of mass to volume. It can help astronomers distinguish terrestrial planets from gas and ice giant planets.</p>
+                            <br><p class="bolded">Equations:
+                            \[\rho={m \over {r^3{4 \over 3}\pi}}\]</p><p class="small">Mass/Volume</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Surface Gravity (\(g\))</h4>
+                            <p>The gravity on the planet's surface.</p>
+                            <p>The greater the surface gravity is, the heavier you'd be on your planet.</p>
+                            <br><p class="bolded">Equations:
+                            \[g={Gm \over r^2}\]</p><p class="small">Newton’s Law of Gravity</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Orbital Radius of a Satellite (\(a_{sat}\))</h4>
+                            <p>The distance between the center of the ellipse created by the satellite's orbit around the
+                                planet and the point on the ellipse furthest from the center. Also called the semi-major axis.</p>
+                            <p>A satellite is any object orbiting the planet (usually a moon).</p>
+                            <br><p class="bolded">Equations:
+                            \[a_{sat}=\sqrt[3]{{m{P_{sat}}^2}{G \over 4\pi^2}}\]</p><p class="small">Kepler’s Third Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Period of a Satellite (\(P_{sat}\))</h4>
+                            <p>The time it takes for the satellite to orbit the planet.</p>
+                            <p>A satellite is any object orbiting the planet (usually a moon).</p>
+                            <br><p class="bolded">Equations:
+                            \[P_{sat}=\sqrt{{4\pi^2 \over G}{{a_{sat}}^3 \over m}}\]</p><p class="small">Kepler’s Third Law</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Drop in Star Brightness During Transit (\(D\))</h4>
+                            <p>The percentage drop in brightness of the host star as the plant moves in front of it,
+                            where the host star is the star the planet orbits around.</p>
+                            <br><p class="bolded">Equations:
+                                \[D= {r^2 \over R^2}\]</p>
+                            <p class="small">Transit Curve</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Mass of Host Star (\(M\))</h4>
+                            <p>The mass of the star that the planet orbits.</p>
+                            <p>The units are in M&#9737;, which means mass in relation to sun's mass.</p>
+                            <br><p class="bolded">Equations:
+                            \[M={4\pi^2 \over G}{{a_{p}}^3 \over P^2}\]<p class="small">Kepler’s Third Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Radius of Host Star (\(R\))</h4>
+                            <p>The radius of the star that the planet orbits.</p>
+                            <p>The units are in R&#9737;, which means radius in relation to sun's radius.</p>
+                            <br><p class="bolded">Equations:
+                            \[R= {r \over \sqrt{D}}\]</p><p class="small">Transit Curve</p>
+                            <p>\[R=2a_{p}({T \over {T_{s}} ({1 - a})^{1\over4}})^2\]</p><p class="small">Stefan-Boltzmann Law</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Temperature of Host Star (\(T_{s}\))</h4>
+                            <p>The time it takes for the satellite to orbit the planet</p>
+                            <p>A satellite is any object orbiting the planet (usually a moon)</p>
+                            <br><p class="bolded">Equations:
+                            \[T_{s} = {T \over ({1 - a})^{1\over4}} \sqrt{2a_p \over R}\]</p><p class="small">Stefan-Boltzmann Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Expected Temperature (\(T\))</h4>
+                            <p>The estimated temperature (also known as equilibrium or black-body temperature) of the planet.</p>
+                            <p>The expected temperature is different from the actual temperature because it doesn't factor in heating from the atmosphere.
+                            The actual temperature will usually be hotter due to gases in the atmosphere trapping heat from the central star, which is called the
+                            greenhouse effect.</p>
+                            <br><p class="bolded">Equations:
+                            \[T = T_{s} ({1 - a})^{1\over4} \sqrt{R \over 2a_p}\]</p><p class="small">Stefan-Boltzmann Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Albedo (\(a\))</h4>
+                            <p>The albedo of the planet.</p>
+                            <p>Albedo describes the percentage of light that the planet reflects. Because things like ice, metal, and clouds reflect more light,
+                            albedo helps astronomers understand what the planets' surface or atmosphere looks like. Typically, planets with
+                            thicker atmospheres have higher albedos due to the increased cloud cover.</p>
+                            <br><p class="bolded">Equations:
+                            \[a = 1 - (\sqrt{2a_p \over R}{T \over T_{s}})^4\]</p><p class="small">Stefan-Boltzmann Law</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Orbital Radius (\(a_{p}\))</h4>
+                            <p>The distance between the center of the ellipse created by the planet's orbit around a host
+                                star and the point on the ellipse furthest from the center. Also called the semi-major axis.</p>
+                            <br><p class="bolded">Equations:
+                            \[a_p = R \sqrt{1 - a} {{T_{s}}^2 \over 2T^2}\]</p><p class="small">Stefan-Boltzmann Law</p>
+                            <p>\[a_{p}=\sqrt[3]{{M{P}^2}{G \over 4\pi^2}}\]</p><p class="small">Kepler’s Third Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Orbital Period (\(P\))</h4>
+                            <p>The time it takes for a planet to orbit its host star.</p>
+                            <br><p class="bolded">Equations:
+                            \[P=\sqrt{{4\pi^2 \over G}{{a_{p}}^3 \over M}}\]</p><p class="small">Kepler’s Third Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Distance from Earth (\(d\))</h4>
+                            <p>The distance from Earth to the planet.</p>
+                            <p>This calculation is made with trigonometry, using the Earth's orbital diameter as a base, so it will
+                                only work for planets outside of our solar system</p>
+                            <br><p class="bolded">Equations:
+                            \[d = {3.26 \over \theta_{p}}\]</p><p class="small">Stellar Parallax</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Parallax Angle (\(\theta_{p}\))</h4>
+                            <p>Measures (in arcseconds) the change in the planet's position in Earth's sky over 6 months.</p>
+                            <p>This method is only used for planets outside of our solar system.</p>
+                            <br><p class="bolded">Equations:
+                            \[\theta_{p} = {3.26 \over d}\]</p><p class="small">Stellar Parallax</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Habitable Zone<br>(\(a_{hz, inner}\), \(a_{hz, outer}\))</h4>
+                            <p>A range describing the distance from the central star where a planet would be able to support life.
+                            It's also described as the Goldilocks zone, because it's the perfect temperature, as it's not too hot
+                            and not too cold</p>
+                            <br><p class="bolded">Equations:
+                            \[a_{hz, inner} = 0.75 R ({T_{s} \over T_&#9737;})^2\]</p><p class="small">Stefan-Boltzmann Law</p>
+                            <p>\[a_{hz, outer} = 1.77 R ({T_{s} \over T_&#9737;})^2\]</p><p class="small">Stefan-Boltzmann Law</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="holder" style="background-color: #FFFFFFAA; clear: both; margin: 50px;">
+                <h4 class="bolded">Constants</h4>
+                <p>
+                    Gravitational Constant:&emsp;\(G = 6.674*10^{-11} {m^3\over{kg*s^2}}\) &ensp;&emsp;
+                    Temperature of the Sun:&emsp;\(T_&#9737; = 5778 K\)<br>
+                    Earth Mass:&emsp;\(1 M⊕ = 5.972 * 10^{24} kg\) &ensp;&emsp;
+                    Earth Radius:&emsp;\(1 R⊕ = 6371 km\) (\(3959 mi\))<br>
+                    Sun Mass:&emsp;\(1 M&#9737; = 1.989 * 10^{30} kg\) &ensp;&emsp;
+                    Sun Radius:&emsp;\(1 R&#9737; = 695700 km\) (\(432288 mi\))
+                </p>
+            </div>
+        </div>
+
+        <script>
+            var img_back = new Image();
+            var c_back = document.getElementById("c_back");
+            var ctx_back = c_back.getContext("2d");
+
+            var c0 = document.getElementById("c0");
+            var ctx0 = c0.getContext("2d");
+
+            var c_text = document.getElementById("c_text");
+            var ctx_text = c_text.getContext("2d");
+
+            ctx_text.font = "bold 16px Arial";
+            ctx_text.fillStyle = "white";
+            ctx_text.fillText("Habitable Zone?", 325, 30);
+            ctx_text.fillText("Unknown", 460, 30);
+            // ctx_text.fillText("No", 455, 30);
+            ctx_text.fillText("Terrestrial Planet", 30, 30);
+
+            img_back.src = 'star-background.jpg';
+
+            var img_earth = new Image();
+            img_earth.src = 'terrestrial_planet_2.png';
+            var img_gas = new Image();
+            img_gas.src = 'gas_planet_fake.png';
+            var img_gas_ice = new Image();
+            img_gas_ice.src = 'ice_planet.png';
+            var img_albedo = new Image();
+            img_albedo.src = 'albedo.png';
+            var img_unhabit = new Image();
+            img_unhabit.src = 'uninhabitable.png';
+
+            // img_back.onload = function() {
+            //     ctx_back.drawImage(img_back, 0, 0, 550, 550);
+            // }
+
+            var c_line = document.getElementById("c_line");
+            var ctx_line = c_line.getContext("2d");
+
+            ctx_line.strokeStyle = "white";
+            ctx_line.lineWidth = 2;
+            ctx_line.fillStyle = "white";
+            ctx_line.beginPath();
+            ctx_line.moveTo(275, 25);
+            ctx_line.lineTo(548, 25);
+            ctx_line.moveTo(275, 15);
+            ctx_line.lineTo(275, 35);
+            ctx_line.moveTo(548, 15);
+            ctx_line.lineTo(548, 35);
+            ctx_line.stroke();
+
+            ctx_line.font = "14px Arial";
+
+            shadBlue = "0px 0px 10px teal";
+            noShad = "none";
+
+
+            const c = 299792458; //Speed of light m/s
+	        const G = 6.67408*Math.pow(10, -11); //Graviational constant m^3/(kg*s^2)
+            const hBar = 1.0545718*Math.pow(10, -34); //Plank's constant / 2*pi
+            const k = 1.38064852*Math.pow(10, -23);
+            const sb = 5.6704*Math.pow(10, -8);//Boltzmann constant
+            const KS = 1361; //Solar constant W/m^2
+            const piSquared = Math.pow(Math.PI, 2);
+
+            var wh = 550;
+            var whinER = 2;
+
+            var mass;
+            var radius;
+            var density;
+            var orbitRadSat;
+            var periodSat;
+            var orbitRad;
+            var period;
+            var temp;
+            var albedo;
+            var sTemp;
+            var gravity;
+            var sMass;
+            var sRadius;
+            var brightDrop;
+            var distance;
+            var parallax;
+            var habit;
+
+            var massFull = false;
+            var radiusFull = false;
+            var densityFull = false;
+            var orbitRadSatFull = false;
+            var periodSatFull = false;
+            var orbitRadFull = false;
+            var periodFull = false;
+            var tempFull = false;
+            var albedoFull = false;
+            var sTempFull = false;
+            var gravityFull = false;
+            var sMassFull = false;
+            var sRadiusFull = false;
+            var brightDropFull = false;
+            var distanceFull = false;
+            var parallaxFull = false;
+
+            var lights = [];
+            lights.push({name: "massLights", list: [{id: "radiusTxt", col: "#A31621", bor: "#D58936"}, {id: "gravityTxt", col: "#A31621"},
+                    {id: "densityTxt", col: "#D58936"}, {id: "periodSatTxt", col: "#240115"}, {id: "orbitRadSatTxt", col: "#240115"}]});
+            lights.push({name: "radiusLights", list: [{id: "massTxt", col: "#A31621", bor: "#D58936"}, {id: "gravityTxt", col: "#A31621"},
+                    {id: "densityTxt", col: "#D58936"}, {id: "sRadiusTxt", col: "#240115"}, {id: "brightDropTxt", col: "#240115"}]});
+            lights.push({name: "densityLights", list: [{id: "massTxt", col: "#A31621"}, {id: "radiusTxt", col: "#A31621"}]});
+            lights.push({name: "orbitRadSatLights", list: [{id: "massTxt", col: "#A31621"}, {id: "periodSatTxt", col: "#A31621"}]});
+            lights.push({name: "periodSatLights", list: [{id: "massTxt", col: "#A31621"}, {id: "orbitRadSatTxt", col: "#A31621"}]});
+            lights.push({name: "orbitRadLights", list: [{id: "sRadiusTxt", col: "#D58936"}, {id: "albedoTxt", col: "#D58936"}, {id: "tempTxt", col: "#D58936"},
+                    {id: "sTempTxt", col: "#D58936"}, {id: "sMassTxt", col: "#A31621"}, {id: "periodTxt", col: "#A31621"}]});
+            lights.push({name: "periodLights", list: [{id: "sMassTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}]});
+            lights.push({name: "tempLights", list: [{id: "sRadiusTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}, {id: "albedoTxt", col: "#A31621"},
+                {id: "sTempTxt", col: "#A31621"}]});
+            lights.push({name: "albedoLights", list: [{id: "sRadiusTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}, {id: "tempTxt", col: "#A31621"},
+                    {id: "sTempTxt", col: "#A31621"}]});
+            lights.push({name: "sTempLights", list: [{id: "sRadiusTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}, {id: "tempTxt", col: "#A31621"},
+                    {id: "albedoTxt", col: "#A31621"}]});
+            lights.push({name: "gravityLights", list: [{id: "massTxt", col: "#A31621"}, {id: "radiusTxt", col: "#A31621"}]});
+            lights.push({name: "sMassLights", list: [{id: "periodTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}]});
+            lights.push({name: "sRadiusLights", list: [{id: "radiusTxt", col: "#A31621"}, {id: "brightDropTxt", col: "#A31621"}, {id: "albedoTxt", col: "#D58936"},
+                    {id: "orbitRadTxt", col: "#D58936"}, {id: "tempTxt", col: "#D58936"}, {id: "sTempTxt", col: "#D58936"}]});
+            lights.push({name: "brightDropLights", list: [{id: "radiusTxt", col: "#A31621"}, {id: "sRadiusTxt", col: "#A31621"}]});
+            lights.push({name: "distanceLights", list: [{id: "parallaxTxt", col: "#A31621"}]});
+            lights.push({name: "parallaxLights", list: [{id: "distanceTxt", col: "#A31621"}]});
+
+            var blues = [{id: "massTxt", blue: false}, {id: "radiusTxt", blue: false}, {id: "densityTxt", blue: false}, {id: "orbitRadSatTxt", blue: false},
+                    {id: "periodSatTxt", blue: false}, {id: "orbitRadTxt", blue: false}, {id: "periodTxt", blue: false}, {id: "tempTxt", blue: false},
+                    {id: "albedoTxt", blue: false}, {id: "sTempTxt", blue: false}, {id: "gravityTxt", blue: false}, {id: "sMassTxt", blue: false},
+                    {id: "sRadiusTxt", blue: false}, {id: "brightDropTxt", blue: false}, {id: "distanceTxt", blue: false}, {id: "parallaxTxt", blue: false}];
+
+            var drawImage = img_earth;
+            var previousImage = drawImage;
+
+            function size(rad) {
+                return wh*rad/whinER;
+            }
+            function pos(rad) {
+                return (wh-(wh*rad/whinER))/2;
+            }
+
+            function drawPlanet(rad, image) {
+                var planetType = "";
+
+                if (image == img_gas) {
+                    planetType = "Gas Giant";
+                } else if (image == img_gas_ice) {
+                    planetType = "Ice Giant";
+                } else {
+                    planetType = "Terrestrial Planet";
+                }
+
+                ctx_text.clearRect(30, 0, 200, 30);
+                ctx_text.fillText(planetType, 30, 30);
+                ctx0.clearRect(0,0,wh,wh);
+                // ctx0.drawImage(image, pos(rad), pos(rad), size(rad), size(rad));
+
+                var img0_op = 0;
+                var imgNew_op = 0;
+                // var loopNum = 100;
+                var loopNum = 0;
+                if (drawImage != previousImage) {
+                    var id = setInterval(frame, 5);
+                    function frame() {
+                        if (imgNew_op == 1) {
+                            clearInterval(id);
+                        } else {
+                            imgNew_op = .01*loopNum;
+                            loopNum++;
+                            ctx0.clearRect(0,0,wh,wh);
+                            ctx0.globalAlpha = imgNew_op;
+                            ctx0.drawImage(drawImage, pos(rad), pos(rad), size(rad), size(rad));
+                        }
+                    }
+                } else {
+                    ctx0.drawImage(image, pos(rad), pos(rad), size(rad), size(rad));
+                }
+
+                ctx_line.clearRect(390, 30, 100, 20);
+                ctx_line.fillText(whinER + ' R⊕', 405, 40);
+            }
+
+            function reset() {
+                document.getElementById("massTxt").value = "";
+        		document.getElementById("radiusTxt").value = "";
+                document.getElementById("densityTxt").value = "";
+                document.getElementById("orbitRadSatTxt").value = "";
+                document.getElementById("periodSatTxt").value = "";
+                document.getElementById("orbitRadTxt").value = "";
+                document.getElementById("periodTxt").value = "";
+                document.getElementById("tempTxt").value = "";
+                document.getElementById("albedoTxt").value = "";
+                document.getElementById("sTempTxt").value = "";
+                document.getElementById("gravityTxt").value = "";
+                document.getElementById("sRadiusTxt").value = "";
+                document.getElementById("sMassTxt").value = "";
+                document.getElementById("brightDropTxt").value = "";
+                document.getElementById("distanceTxt").value = "";
+                document.getElementById("parallaxTxt").value = "";
+
+                document.getElementById("massTxt").style.boxShadow = noShad;
+                document.getElementById("radiusTxt").style.boxShadow = noShad;
+                document.getElementById("densityTxt").style.boxShadow = noShad;
+                document.getElementById("orbitRadSatTxt").style.boxShadow = noShad;
+                document.getElementById("periodSatTxt").style.boxShadow = noShad;
+                document.getElementById("orbitRadTxt").style.boxShadow = noShad;
+                document.getElementById("periodTxt").style.boxShadow = noShad;
+                document.getElementById("tempTxt").style.boxShadow = noShad;
+                document.getElementById("albedoTxt").style.boxShadow = noShad;
+                document.getElementById("sTempTxt").style.boxShadow = noShad;
+                document.getElementById("gravityTxt").style.boxShadow = noShad;
+                document.getElementById("sRadiusTxt").style.boxShadow = noShad;
+                document.getElementById("sMassTxt").style.boxShadow = noShad;
+                document.getElementById("brightDropTxt").style.boxShadow = noShad;
+                document.getElementById("distanceTxt").style.boxShadow = noShad;
+                document.getElementById("parallaxTxt").style.boxShadow = noShad;
+
+                whinER = 2;
+
+                calculate();
+            }
+
+            function calculate() {
+                mass = document.getElementById("massTxt").value;
+                radius = document.getElementById("radiusTxt").value;
+                density = document.getElementById("densityTxt").value;
+                orbitRadSat = document.getElementById("orbitRadSatTxt").value;
+                periodSat = document.getElementById("periodSatTxt").value;
+                period = document.getElementById("periodTxt").value;
+                orbitRad = document.getElementById("orbitRadTxt").value;
+                temp = document.getElementById("tempTxt").value;
+                albedo = document.getElementById("albedoTxt").value;
+                sTemp = document.getElementById("sTempTxt").value;
+                gravity = document.getElementById("gravityTxt").value;
+                sRadius = document.getElementById("sRadiusTxt").value;
+                sMass = document.getElementById("sMassTxt").value;
+                brightDrop = document.getElementById("brightDropTxt").value;
+                distance = document.getElementById("distanceTxt").value;
+                parallax = document.getElementById("parallaxTxt").value;
+                habit = true;
+
+                (document.getElementById("massTxt").value === "") ? massFull = false : massFull = true;
+                (document.getElementById("radiusTxt").value === "") ? radiusFull = false : radiusFull = true;
+                (document.getElementById("densityTxt").value === "") ? densityFull = false : densityFull = true;
+                (document.getElementById("orbitRadSatTxt").value === "") ? orbitRadSatFull = false : orbitRadSatFull = true;
+                (document.getElementById("periodSatTxt").value === "") ? periodSatFull = false : periodSatFull = true;
+                (document.getElementById("periodTxt").value === "") ? periodFull = false : periodFull = true;
+                (document.getElementById("orbitRadTxt").value === "") ? orbitRadFull = false : orbitRadFull = true;
+                (document.getElementById("tempTxt").value === "") ? tempFull = false : tempFull = true;
+                (document.getElementById("albedoTxt").value === "") ? albedoFull = false : albedoFull = true;
+                (document.getElementById("sTempTxt").value === "") ? sTempFull = false : sTempFull = true;
+                (document.getElementById("gravityTxt").value === "") ? gravityFull = false : gravityFull = true;
+                (document.getElementById("sRadiusTxt").value === "") ? sRadiusFull = false : sRadiusFull = true;
+                (document.getElementById("sMassTxt").value === "") ? sMassFull = false : sMassFull = true;
+                (document.getElementById("brightDropTxt").value === "") ? brightDropFull = false : brightDropFull = true;
+                (document.getElementById("distanceTxt").value === "") ? distanceFull = false : distanceFull = true;
+                (document.getElementById("parallaxTxt").value === "") ? parallaxFull = false : parallaxFull = true;
+
+                for (i=0; i<blues.length; i++) {
+                    blues[i].blue = false;
+                }
+
+        		//Calling all of the methods that do the calculations
+        		massCalc();
+        		radiusCalc();
+        		sRadiusCalc();
+        		tempCalc();
+        		gravityCalc();
+                densityCalc();
+        		distanceCalc();
+        		parallaxCalc();
+        		periodSatCalc();
+        		orbitRadSatCalc();
+        		orbitRadCalc();
+        		albedoCalc();
+        		brightDropCalc();
+                sMassCalc();
+                periodCalc();
+        		habitableCalc();
+        		sTemperatureCalc();
+                updatePlanet();
+        	}
+
+            function massCalc() {
+                //Calculating the mass of the planet using different equations, based on what information is available
+                if (!massFull && ((radiusFull && (gravityFull || densityFull)) || (periodSatFull && orbitRadSatFull))) {
+                    //Radius and density
+                    if (radiusFull && densityFull) {
+                        mass = KGtoEM((density * ((4/3)*Math.PI*Math.pow(ERtoM(radius)*100, 3)))/1000);
+                    }
+
+                    //Radius and gravity
+            		else if (radiusFull && gravityFull) {
+            			mass = KGtoEM((Math.pow(ERtoM(radius), 2) * gravity) / G);
+            		}
+
+                    //Orbital radius of satellite and period
+            		else if (periodSatFull && orbitRadSatFull) {
+                        mass = KGtoEM((4*piSquared*Math.pow(KMtoM(orbitRadSat), 3)) / (G*Math.pow(DtoSec(periodSat), 2)));
+            		}
+
+                    document.getElementById("massTxt").value = sigfig(mass);
+                    document.getElementById("massTxt").style.boxShadow = shadBlue;
+                    massFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "massTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("massTxt").style.boxShadow = noShad;
+                }
+        	}
+
+            function radiusCalc() {
+                //Calculating the radius using different equations, based on what information is available
+                if (!radiusFull && ((sRadiusFull && brightDropFull) || (massFull && (gravityFull || densityFull)))) {
+                    //Star radius and brightness drop
+            		if (sRadiusFull && brightDropFull) {
+            			radius = (Math.sqrt(brightDrop*.01) * SRtoER(sRadius));
+            		}
+
+                    //Planet mass and gravity
+            		else if (massFull && gravityFull) {
+            			radius = (MtoER(Math.sqrt((G*EMtoKG(mass)) / gravity)));
+            		}
+
+                    //Mass and density
+            		else if (massFull && densityFull) {
+                		radius = MtoER(Math.pow(((EMtoKG(mass)*1000) / density) * (3/(4*Math.PI)), 1/3) / 100);
+            		}
+
+                    document.getElementById("radiusTxt").value = sigfig(radius);
+                    document.getElementById("radiusTxt").style.boxShadow = shadBlue;
+                    radiusFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "radiusTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("radiusTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function sRadiusCalc() {
+                //Calculating the star radius using different equations, based on what information is available
+                if (!sRadiusFull && ((radiusFull && brightDropFull) || (orbitRadFull && albedoFull && tempFull && sTempFull))) {
+
+                    //Radius and bright drop
+            		if (radiusFull && brightDropFull) {
+            			sRadius = (ERtoSR(radius) / Math.sqrt(brightDrop*.01));
+            		}
+
+            		//Orbital radius, albedo, temperature, star temperature
+            		else if (orbitRadFull && albedoFull && tempFull && sTempFull) {
+            			sRadius = (MtoSR(AUtoM(orbitRad) * 2 * Math.pow(FtoK(temp)/sTemp * Math.pow(1 - (albedo*.01), .25), 2)));
+            		}
+
+                    document.getElementById("sRadiusTxt").value = sigfig(sRadius);
+                    document.getElementById("sRadiusTxt").style.boxShadow = shadBlue;
+                    sRadiusFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "sRadiusTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("sRadiusTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function tempCalc() {
+                //Calculating the temperature using different equations, based on what information is available
+                if (!tempFull && (orbitRadFull && albedoFull && sRadiusFull && sTempFull)) {
+                    temp = KtoF((sTemp)*Math.pow(1 - (.01*albedo), .25)*Math.sqrt(SRtoM(sRadius)/(2*AUtoM(orbitRad))));
+
+                    document.getElementById("tempTxt").value = sigfig(temp);
+                    document.getElementById("tempTxt").style.boxShadow = shadBlue;
+                    tempFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "tempTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("tempTxt").style.boxShadow = noShad;
+                }
+    		}
+
+            function gravityCalc() {
+                //Calculating the gravity using different equations, based on what information is available
+                if (!gravityFull && (massFull && radiusFull)) {
+                    gravity = (G*EMtoKG(mass)/Math.pow(ERtoM(radius), 2));
+
+                    document.getElementById("gravityTxt").value = sigfig(gravity);
+                    document.getElementById("gravityTxt").style.boxShadow = shadBlue;
+                    gravityFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "gravityTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("gravityTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function densityCalc() {
+                //Calculating the density using different equations, based on what information is available
+                if (!densityFull && (massFull && radiusFull)) {
+                    density = ((EMtoKG(mass)*1000)/((4/3)*Math.PI*Math.pow(ERtoM(radius)*100, 3)));
+
+                    document.getElementById("densityTxt").value = sigfig(density);
+                    document.getElementById("densityTxt").style.boxShadow = shadBlue;
+                    densityFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "densityTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("densityTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function distanceCalc() {
+                //Calculating the distance to earth using different equations, based on what information is available
+        		//Parallax angle
+        		if (!distanceFull && parallaxFull) {
+        			distance = ((1/parallax)*3.26156);
+
+                    document.getElementById("distanceTxt").value = sigfig(distance);
+                    document.getElementById("distanceTxt").style.boxShadow = shadBlue;
+                    distanceFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "distanceTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("distanceTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function parallaxCalc() {
+                //Calculating the parallax using different equations, based on what information is available
+        		//Distance
+        		if (!parallaxFull && distanceFull) {
+
+                    parallax = 1/(distance/3.26156);
+
+                    document.getElementById("parallaxTxt").value = sigfig(parallax);
+                    document.getElementById("parallaxTxt").style.boxShadow = shadBlue;
+                    parallaxFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "parallaxTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("parallaxTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function periodSatCalc() {
+                //Calculating the period using different equations, based on what information is available
+        		//Planet mass and orbital radius of satellite
+        		if (!periodSatFull && massFull && orbitRadSatFull) {
+        			periodSat = SectoD(Math.pow((4*piSquared*Math.pow(KMtoM(orbitRadSat), 3))/(G*EMtoKG(mass)), .5));
+
+                    document.getElementById("periodSatTxt").value = sigfig(periodSat);
+                    document.getElementById("periodSatTxt").style.boxShadow = shadBlue;
+                    periodSatFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "periodSatTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("periodSatTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function orbitRadSatCalc() {
+                //Calculating the period using different equations, based on what information is available
+        		//Planet mass and orbital radius of satellite
+        		if (!orbitRadSatFull && massFull && periodSatFull) {
+        			orbitRadSat = MtoKM(Math.cbrt((G*(EMtoKG(mass))*Math.pow(DtoSec(periodSat), 2))/(4*piSquared)));
+
+                    document.getElementById("orbitRadSatTxt").value = sigfig(orbitRadSat);
+                    document.getElementById("orbitRadSatTxt").style.boxShadow = shadBlue;
+                    periodSatFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "orbitRadSatTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("orbitRadSatTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function orbitRadCalc() {
+                //Calculating the orbital radius using different equations, based on what information is available
+        		//Star radius, albedo, temperature, temperature of star
+        		if (!orbitRadFull && (tempFull && albedoFull && sRadiusFull && sTempFull) || (sMassFull && periodFull)) {
+                    if (sMassFull && periodFull) {
+                        orbitRad = MtoAU(Math.cbrt((G*(SMtoKG(sMass))*Math.pow(YrstoSec(period), 2))/(4*piSquared)));
+                    } else {
+                        orbitRad = MtoAU((SRtoM(sRadius)/Math.pow(FtoK(temp)/(sTemp*Math.pow(1-(albedo*.01), .25)), 2))/2);
+                    }
+
+                    document.getElementById("orbitRadTxt").value = sigfig(orbitRad);
+                    document.getElementById("orbitRadTxt").style.boxShadow = shadBlue;
+                    orbitRadFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "orbitRadTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("orbitRadTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function periodCalc() {
+                //Calculating the period using different equations, based on what information is available
+        		//Planet mass and orbital radius of satellite
+        		if (!periodFull && sMassFull && orbitRadFull) {
+        			period = SectoYrs(Math.pow((4*piSquared*Math.pow(AUtoM(orbitRad), 3))/(G*SMtoKG(sMass)), .5));
+
+                    document.getElementById("periodTxt").value = sigfig(period);
+                    document.getElementById("periodTxt").style.boxShadow = shadBlue;
+                    periodSatFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "periodTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("periodTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function sMassCalc() {
+                //Calculating the mass of the planet using different equations, based on what information is available
+                if (!sMassFull && (periodFull && orbitRadFull)) {
+                    sMass = KGtoSM((4*piSquared*Math.pow(AUtoM(orbitRad), 3)) / (G*Math.pow(YrstoSec(period), 2)));
+
+                    document.getElementById("sMassTxt").value = sigfig(sMass);
+                    document.getElementById("sMassTxt").style.boxShadow = shadBlue;
+                    sMassFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "sMassTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("sMassTxt").style.boxShadow = noShad;
+                }
+        	}
+
+            function albedoCalc() {
+                //Calculating the albedo using different equations, based on what information is available
+        		//Temperature, orbital radius, star radius, star temperature
+        		if (!albedoFull && (tempFull && orbitRadFull && sRadiusFull && sTempFull)) {
+
+        			albedo = ((1 - Math.pow((FtoK(temp)/sTemp)*Math.sqrt((AUtoM(orbitRad)*2)/SRtoM(sRadius)), 4))*100);
+        			//If the albedo is less than 0, set to 0
+        			if (albedo < 0) {
+        				albedo = 0;
+        			} else if (albedo > 100) {
+                        albedo = 100;
+                    }
+
+                    document.getElementById("albedoTxt").value = sigfig(albedo);
+                    document.getElementById("albedoTxt").style.boxShadow = shadBlue;
+                    albedoFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "albedoTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("albedoTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function brightDropCalc() {
+                //Calculating the brightness drop using different equations, based on what information is available
+        		//Radius and star radius
+        		if (!brightDropFull && radiusFull && sRadiusFull) {
+        			brightDrop = ((Math.pow(radius, 2)/Math.pow(SRtoER(sRadius), 2))*100);
+
+                    document.getElementById("brightDropTxt").value = sigfig(brightDrop);
+                    document.getElementById("brightDropTxt").style.boxShadow = shadBlue;
+                    brightDropFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "brightDropTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("brightDropTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function habitableCalc() {
+                //Calculating the habitability based on inputted variables
+        		//Orbital radius and star temperature
+        		if (sRadiusFull && orbitRadFull && sTempFull) {
+                    //If planet within specified boundries, considered in habitable zone and check yes
+        			if ((.75*sRadius*Math.pow((sTemp/5778), 2)) <= orbitRad && orbitRad <= (1.77*sRadius*Math.pow(sTemp/5778, 2))) {
+                        ctx_text.clearRect(455, 0, 550, 40);
+                        ctx_text.shadowColor = "green";
+                        ctx_text.shadowBlur = 10;
+                        ctx_text.font = "lighter 16px Arial";
+                        for (i=0; i < 3; i++) {
+                            ctx_text.fillText('Yes', 475, 30);
+                        }
+                        ctx_text.font = "bold 16px Arial";
+                        ctx_text.fillText('Yes', 475, 30);
+
+                        habit = true;
+        			} else {
+                        ctx_text.clearRect(455, 0, 550, 40);
+                        ctx_text.shadowColor = "red";
+                        ctx_text.shadowBlur = 10;
+                        ctx_text.font = "lighter 16px Arial";
+                        for (i=0; i < 3; i++) {
+                            ctx_text.fillText("No", 490, 30);
+                        }
+                        ctx_text.font = "bold 16px Arial";
+                        ctx_text.fillText("No", 490, 30);
+                        habit = false;
+        			}
+
+                    ctx_text.shadowBlur = 0;
+        		} else {
+                    // ctx_text.font = "bold 16px Arial";
+                    ctx_text.clearRect(460, 0, 550, 50);
+                    ctx_text.fillText("Unknown", 460, 30);
+                }
+            }
+
+            function sTemperatureCalc() {
+                //Calculating the temperature of the star using different equations, based on what information is available
+        		//Albedo, orbital radius, star radius, temperature
+                if (!sTempFull && (orbitRadFull && albedoFull && sRadiusFull && tempFull)) {
+                    sTemp = (FtoK(temp)/(Math.pow(1-(.01*albedo), .25)*Math.sqrt(SRtoM(sRadius)/(2*AUtoM(orbitRad)))));
+
+                    document.getElementById("sTempTxt").value = sigfig(sTemp);
+                    document.getElementById("sTempTxt").style.boxShadow = shadBlue;
+                    sTempFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "sTempTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("sTempTxt").style.boxShadow = noShad;
+                }
+            }
+
+
+            function updatePlanet() {
+                var drawRadius = 1;
+                whinER = 2;
+                previousImage = drawImage;
+                drawImage = img_earth;
+
+                //Drawing planet according to radius
+                if (radiusFull) {
+                    drawRadius = radius;
+
+                    if (radius < 2) {
+                        whinER = 2;
+                    } else if (radius < 3.5) {
+                        whinER = 5;
+                    } else {
+                        drawImage = img_gas;
+
+                        if (radius < 5) {
+                            whinER = 5;
+                        } else if (radius < 15) {
+                            whinER = 15;
+                        } else {
+                            whinER = 30;
+                        }
+                    }
+                }
+
+                if (densityFull) {
+                    if (density < 3) {
+                        drawImage = img_gas;
+                    } else {
+                        drawImage = img_earth;
+                    }
+                }
+
+                if (massFull) {
+                    if (mass > 10 && drawImage == img_earth) {
+                        drawImage = img_gas;
+                    }
+                    if (mass < 30 && drawImage == img_gas) {
+                        drawImage = img_gas_ice;
+                    }
+                }
+
+                if (sRadiusFull && orbitRadFull && sTempFull  && drawImage == img_earth) {
+                    if (!habit) {
+                        drawImage = img_unhabit;
+                    }
+                }
+
+                if (albedoFull && (drawImage == img_earth || drawImage == img_unhabit)) {
+                    if (albedo > 60) {
+                        drawImage = img_albedo;
+                    }
+                }
+
+                drawPlanet(drawRadius, drawImage);
+            }
+
+            function noShadow(element) {
+                element.style.boxShadow = noShad;
+                var txtBox = element.id.substring(0, element.id.length-3) + "Txt";
+
+                for (i=0; i<blues.length; i++) {
+                    if (blues[i].id == txtBox) {
+                        blues[i].blue = false;
+                    }
+                }
+            }
+
+            function lightUp(element) {
+                var lightList = [];
+                var character = element.id.substring(0, element.id.length-3);
+                var lightListName = character + "Lights";
+                var suggestId = character + "Suggest";
+                var explainId = character + "Ex";
+
+                var ex_h = 0;
+                var ex_op = 0;
+                var loopNum = 0;
+                var id = setInterval(frame, 0);
+                document.getElementById(explainId).style.border = "3px solid white";
+                document.getElementById(explainId).style.borderRadius = "10px";
+                document.getElementById(explainId).children[0].style.opacity = 1;
+                function frame() {
+                    if (ex_h == 40) {
+                        if (ex_op == 1) {
+                            clearInterval(id);
+                        } else {
+                            ex_op = .02*loopNum;
+                            loopNum++;
+                            document.getElementById(explainId).style.opacity = ex_op;
+                        }
+                    } else {
+                        ex_h += 8;
+                        document.getElementById(explainId).style.height = ex_h + "px";
+                        document.getElementById(explainId).style.padding = ex_h/2 + "px";
+                    }
+                }
+
+                for (i=0; i<lights.length; i++) {
+                    if (lights[i].name == lightListName) {
+                        lightList = lights[i].list;
+                    }
+                }
+
+                for (i=0; i < lightList.length; i++) {
+                    document.getElementById(lightList[i].id).style.boxShadow = "0px 0px 10px " + lightList[i].col;
+                    if (lightList[i].bor != null) {
+                        document.getElementById(lightList[i].id).style.boxShadow = "-3px -3px 10px " + lightList[i].col +
+                                ", 3px 3px 10px " + lightList[i].bor;
+                    }
+                }
+
+                document.getElementById(suggestId).style.visibility = "visible";
+            }
+
+            function lightDown(element) {
+                var lightList = [];
+                var character = element.id.substring(0, element.id.length-3);
+                var lightListName = character + "Lights";
+                var suggestId = character + "Suggest";
+                var explainId = character + "Ex";
+
+                document.getElementById(explainId).children[0].style.opacity = 0;
+                var ex_h = 40;
+                var ex_op = 1;
+                var loopNum = 0;
+                var id = setInterval(frame, 0);
+                document.getElementById(explainId).style.border = "0px";
+                function frame() {
+                    if (ex_op == 0) {
+                        if(ex_h == 0) {
+                            clearInterval(id);
+                        } else {
+                            ex_h -= 8;
+                            document.getElementById(explainId).style.height = ex_h + "px";
+                            document.getElementById(explainId).style.padding = ex_h/2 + "px";
+                        }
+                    } else {
+                        ex_op = .02*loopNum;
+                        loopNum++;
+                        document.getElementById(explainId).style.opacity = ex_op;
+                    }
+                }
+
+                for (i=0; i<lights.length; i++) {
+                    if (lights[i].name == lightListName) {
+                        lightList = lights[i].list;
+                    }
+                }
+
+                for (i=0; i < lightList.length; i++) {
+                    for (j=0; j<blues.length; j++) {
+                        if (lightList[i].id == blues[j].id) {
+                            if (blues[j].blue) {
+                                document.getElementById(lightList[i].id).style.boxShadow = shadBlue;
+                            } else {
+                                document.getElementById(lightList[i].id).style.boxShadow = noShad;
+                            }
+                        }
+                    }
+                }
+
+                document.getElementById(suggestId).style.visibility = "hidden";
+            }
+
+            //Solar mass to kilograms
+        	function SMtoKG(SM) {
+        		SM = SM*2*Math.pow(10, 30);
+        		return SM;
+        	}
+
+        	//Earth mass to kilograms
+        	function EMtoKG(EM) {
+        		EM = EM*5.972*Math.pow(10, 24);
+        		return EM;
+        	}
+
+        	//Kilograms to earth mass
+        	function KGtoEM(KG) {
+        		KG = KG/(5.972*Math.pow(10, 24));
+        		return KG;
+        	}
+
+        	//Kilograms to solar mass
+        	function KGtoSM(KG) {
+        		KG = KG*5*Math.pow(10, -31);
+        		return KG;
+        	}
+
+        	//Days to seconds
+        	function DtoSec(days) {
+        		days = days*24*60*60;
+        		return days;
+        	}
+
+        	//Seconds to days
+        	function SectoD(sec) {
+        		sec = sec/(24*60*60);
+        		return sec;
+        	}
+
+            //Years to seconds
+        	function YrstoSec(yrs) {
+        		yrs = yrs*3.154e7;
+        		return yrs;
+        	}
+
+        	//Seconds to years
+        	function SectoYrs(sec) {
+        		sec = sec/3.154e7;
+        		return sec;
+        	}
+
+        	//AU to meters
+        	function AUtoM(AU) {
+        		AU = AU*1.49597870691*Math.pow(10, 11);
+        		return AU;
+        	}
+
+        	//Meters to AU
+        	function MtoAU(m) {
+        		m = 6.684587122671*Math.pow(10, -12)*m;
+        		return m;
+        	}
+
+        	//Kilometers to meters
+        	function KMtoM(KM) {
+        		KM = KM*1000;
+        		return KM;
+        	}
+
+        	//Meters to kilometers
+        	function MtoKM(M) {
+        		M = M/1000;
+        		return M;
+        	}
+
+        	//Earth radius to solar radius
+        	function ERtoSR(ER) {
+        		ER = ER*.009158;
+        		return ER;
+        	}
+
+        	//Solar radius to Earth radius
+        	function SRtoER(SR) {
+        		SR = SR/.009158;
+        		return SR;
+        	}
+
+        	//Solar radius to meters
+        	function SRtoM(SR) {
+        		SR = SR*696340000;
+        		return SR;
+        	}
+
+        	//Meters to solar radius
+        	function MtoSR(M) {
+        		M = M/696340000;
+        		return M;
+        	}
+
+        	//Earth radius to meters
+        	function ERtoM(ER) {
+        		ER = ER*6371000;
+        		return ER;
+        	}
+
+        	//Meters to earth radius
+        	function MtoER(M) {
+        		M = M/6371000;
+        		return M;
+        	}
+
+        	//Kelvin to farenheit
+        	function KtoF(K) {
+        		K = 1.8*(K-273)+32;
+        		return K;
+        	}
+
+        	//Farenheight to kelvin
+        	function FtoK(F) {
+        		F = ((F-32)/1.8)+273;
+        		return F;
+        	}
+
+            //Writes everything with sig figs
+            function sigfig(num) {
+                if (Math.abs(num) < 0.01) {
+                    return num.toExponential(2);
+                } else if (Math.abs(num) < 0.1) {
+                    return num.toFixed(4);
+                } else if (Math.abs(num) < 1) {
+                    return num.toFixed(3);
+                } else if (Math.abs(num) < 10) {
+                    return num.toFixed(2);
+                } else if (Math.abs(num) < 100) {
+                    return num.toFixed(1);
+                } else if (Math.abs(num) < 1000) {
+                    return Math.round(num);
+                } else if (Math.abs(num) < 10000) {
+                    return Math.round(num/10)*10;
+                } else if (Math.abs(num) < 100000) {
+                    return Math.round(num/100)*100;
+                } else if (Math.abs(num) < 1000000) {
+                    return Math.round(num/1000)*1000;
+                } else {
+                    return num.toExponential(2);
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="stylesheet_planets.css">
+        <title>Stellar Calculations</title>
+
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </head>
+    <body onload="drawStar(1, classes[2]); calculate();">
+        <header>
+            <h1>Create Your Own Star!</h1>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row form-group heading">
+                <div class="col-md-3 col-sm-12">
+                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="planet_calc.html"><button type="button" class="btn btn-outline-light btn-block">Planet Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="star_calc.html"><button type="button" class="btn btn-outline-light btn-block">Star Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="black_hole_calc.html"><button type="button" class="btn btn-outline-light btn-block">Black Hole Calculations</button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="planet-holder">
+            <div class="float-right">
+                <div class="canvasHolderImage">
+
+                    <canvas class="canvas" id="c_back" width="550" height="550" style="border:0px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+
+                    <canvas class="canvas" id="c0" width="550" height="550" style="border:0px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+
+                    <canvas class="canvas" id="c_text" width="550" height="550" style="border:1px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+                </div>
+                <div class="canvasHolderImage" style="height: 50px; width: 500px; margin-right: 0px; margin-top: 0px;">
+
+                    <canvas class="canvas" id="c_line" width="550" height="50" style="border:0px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+                </div>
+                <div class="holder buttons" style="margin-left: 140px; margin-bottom: 40px; width: 265px;">
+                    <input type='button' class="btn btn-outline-primary btn-lg" onclick="calculate();" value='Calculate'>&emsp;
+                    <input type='button' class="btn btn-outline-secondary btn-lg" onclick="reset();" value='Reset'>
+                </div>
+            </div>
+
+            <div class="float-left holder planet-calc" style="padding-left: 30px; padding-right: 30px;">
+                <h3 class="center-col bolded">Enter information about your star</h3>
+                <p class="center-col" style="font-size: 14px;">
+                    Enter some characteristics about your star and click calculate to see what properties those values can calculate and what your star
+                    might look like!
+                </p>
+                <p class="center-col" style="font-size: 14px;">
+                    The groups of characteristics needed to calculate a property automatically are highlighted when you select it and suggested values
+                    are provided for manual entry.
+                </p><br>
+                <p>
+                    Mass&emsp;
+                    <input type='number' min="0" step="any" id='massTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> M☉
+                    <i id='massSuggest'>&ensp;0.08 - 60 M☉</i>
+                </p>
+                <div class="expand" id="massEx" style="background-color: #FFFFFFAA;">
+                    <p>Mass of the star compared to the sun&ensp;<strong>(Sun = 1M☉, Vega = 2.14M☉)</strong></p>
+                </div>
+                <p>
+                    Radius&emsp;
+                    <input type='number' min="0" step="any" id='radiusTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> R☉
+                    <i id='radiusSuggest'>&ensp;0.05 - 40 R☉</i>
+                </p>
+                <div class="expand" id="radiusEx" style="background-color: #FFFFFFAA;">
+                    <p>Radius of the star compared to the sun&ensp;<strong>(Sun = 1R☉, Vega = 2.36R☉)</strong></p>
+                </div>
+                <p>
+                    Luminosity&emsp;
+                    <input type='number' min="0" step="any" id='luminTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> L☉
+                    <i id='luminSuggest'>&ensp;0.005 - 100,000 L☉</i>
+                </p>
+                <div class="expand" id="luminEx" style="background-color: #FFFFFFAA;">
+                    <p>Luminosity of the star compared to the sun&ensp;<strong>(Sun = 1L☉, Vega = 40.1L☉)</strong></p>
+                </div>
+                <p>
+                    Absolute Visual Magnitude&emsp;
+                    <input type='number' step="any" id='absmagTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> mag
+                    <i id='absmagSuggest'>&ensp;-7.8 - 10 mag</i>
+                </p>
+                <div class="expand" id="absmagEx" style="background-color: #FFFFFFAA;">
+                    <p>Brightness of star if at a set distance (inverse to brightness)&ensp;<strong>(Sun = 4.83, Vega = 0.582)</strong></p>
+                </div>
+                <p>
+                    Apparent Magnitude&emsp;
+                    <input type='number' step="any" id='obsmagTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> mag
+                    <i id='obsmagSuggest'>&ensp;-1.42 - 30 mag</i>
+                </p>
+                <div class="expand" id="obsmagEx" style="background-color: #FFFFFFAA;">
+                    <p>How bright star appears from Earth (inverse to brightness)&ensp;<strong>(Sun = -26.74, Vega = 0.026)</strong></p>
+                </div>
+                <p>
+                    Lifetime&emsp;
+                    <input type='number' min="1000" step="any" id='lifeTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> years
+                    <i id='lifeSuggest'>&ensp;45,000 - 2e13 years</i>
+                </p>
+                <div class="expand" id="lifeEx" style="background-color: #FFFFFFAA;">
+                    <p>How long before the star will begin to die&ensp;<strong>(Sun = 10e9yrs, Vega = 1e9yrs)</strong></p>
+                </div>
+                <p>
+                    Temperature&emsp;
+                    <input type='number' min="3000" step="any" id='tempTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> K
+                    <i id='tempSuggest'>&ensp;2,400 - 45,000K</i>
+                </p>
+                <div class="expand" id="tempEx" style="background-color: #FFFFFFAA;">
+                    <p>Temperature of the star's surface&ensp;<strong>(Sun = 5,800K, Vega = 9,600K)</strong></p>
+                </div>
+                <p>
+                    Peak Wavelength&emsp;
+                    <input type='number' min="0" step="any" id='waveTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> nm
+                    <i id='waveSuggest'>&ensp;75 - 1,200 nm</i>
+                </p>
+                <div class="expand" id="waveEx" style="background-color: #FFFFFFAA;">
+                    <p>Wavelength where the star emits the most light&ensp;<strong>(Sun = 500nm, Vega = 300nm)</strong></p>
+                </div>
+                <p>
+                    Distance from Earth&emsp;
+                    <input type='number' min="0" step="any" id='distanceTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> ly
+                    <i id='distanceSuggest'>&ensp;4 - 30,000 ly</i>
+                </p>
+                <div class="expand" id="distanceEx" style="background-color: #FFFFFFAA;">
+                    <p>Distance from Earth to a distant star&ensp;<strong>(Vega = 25ly)</strong></p>
+                </div>
+                <p>
+                    Parallax Angle&emsp;
+                    <input type='number' step="any" id='parallaxTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> "
+                    <i id='parallaxSuggest'>&ensp;0.0001 - 0.8"</i>
+                </p>
+                <div class="expand" id="parallaxEx" style="background-color: #FFFFFFAA;">
+                    <p>Change in position in Earth's sky over 6 months&ensp;<strong>(Vega = 0.129")</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="holder info">
+            <h2 class="center-col bolded">Notes</h2>
+            <div class="holder" style="background-color: #FFFFFFAA; margin: 50px;">
+                <h4 class="bolded">Star Characteristics</h4>
+                <table class="table">
+                    <th>Characteristic</th>
+                    <th>Mu Columbae</th>
+                    <th>Algol A</th>
+                    <th>Vega</th>
+                    <th>Procyon</th>
+                    <th>Sun</th>
+                    <th>Alpha<br>Centauri B</th>
+                    <th>Proxima Centauri</th>
+                    <tr>
+                        <th>Mass (M☉)</th>
+                        <td>16</td>
+                        <td>3.17</td>
+                        <td>2.14</td>
+                        <td>1.50</td>
+                        <td>1</td>
+                        <td>0.907</td>
+                        <td>0.122</td>
+                    </tr>
+                    <tr>
+                        <th>Radius (R☉)</th>
+                        <td>6.58</td>
+                        <td>2.73</td>
+                        <td>2.36</td>
+                        <td>2.05</td>
+                        <td>1</td>
+                        <td>0.863</td>
+                        <td>0.154</td>
+                    </tr>
+                    <tr>
+                        <th>Luminosity (L☉)</th>
+                        <td>45,700</td>
+                        <td>182</td>
+                        <td>40.1</td>
+                        <td>6.93</td>
+                        <td>1</td>
+                        <td>0.500</td>
+                        <td>0.002</td>
+                    </tr>
+                    <tr>
+                        <th>Absolute Visual<br>Magnitude (mag)</th>
+                        <td>−3.64</td>
+                        <td>-0.07</td>
+                        <td>0.58</td>
+                        <td>2.66</td>
+                        <td>4.83</td>
+                        <td>5.71</td>
+                        <td>15.60</td>
+                    </tr>
+                    <tr>
+                        <th>Apparent Magnitude (mag)</th>
+                        <td>5.18</td>
+                        <td>2.12</td>
+                        <td>0.03</td>
+                        <td>0.34</td>
+                        <td>-26.74</td>
+                        <td>1.33</td>
+                        <td>10.43</td>
+                    </tr>
+                    <tr>
+                        <th>Lifetime (yrs)</th>
+                        <td>2.5e6</td>
+                        <td>0.3e9</td>
+                        <td>1e9</td>
+                        <td>3e9</td>
+                        <td>10e9</td>
+                        <td>13e9</td>
+                        <td>5.5e12</td>
+                    </tr>
+                    <tr>
+                        <th>Temperature (K)</th>
+                        <td>33,000</td>
+                        <td>13,000</td>
+                        <td>9,602</td>
+                        <td>6,530</td>
+                        <td>5,778</td>
+                        <td>5,260</td>
+                        <td>3,042</td>
+                    </tr>
+                    <tr>
+                        <th>Peak Wavelength (nm)</th>
+                        <td>80</td>
+                        <td>220</td>
+                        <td>300</td>
+                        <td>445</td>
+                        <td>500</td>
+                        <td>550</td>
+                        <td>950</td>
+                    </tr>
+                    <tr>
+                        <th>Distance (ly)</th>
+                        <td>13,000</td>
+                        <td>90</td>
+                        <td>25</td>
+                        <td>11.5</td>
+                        <td>1.6e-5</td>
+                        <td>4.37</td>
+                        <td>4.24</td>
+                    </tr>
+                    <tr>
+                        <th>Parallax</th>
+                        <td>0.0025"</td>
+                        <td>0.0363"</td>
+                        <td>0.1302"</td>
+                        <td>0.2846"</td>
+                        <td>N/A</td>
+                        <td>0.7548"</td>
+                        <td>0.7685"</td>
+                    </tr>
+                    <tr>
+                        <th>Class</th>
+                        <td>O</td>
+                        <td>B</td>
+                        <td>A</td>
+                        <td>F</td>
+                        <td>G</td>
+                        <td>K</td>
+                        <td>M</td>
+                    </tr>
+                    <tr>
+                        <th>Color</th>
+                        <td>Light Blue</td>
+                        <td>Blue White</td>
+                        <td>White</td>
+                        <td>Yellow White</td>
+                        <td>Yellow</td>
+                        <td>Orange Yellow</td>
+                        <td>Red Orange</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="container-fluid" align="center">
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Mass (\(M\))</h4>
+                            <p>The mass of the star. Mass is estimated with these equations and assumes that the star is on the main sequence.</p>
+                            <p>The units are in M☉, which means mass in relation to the Sun's mass.</p>
+                            <br><p class="bolded">Equations:
+                            \[M = {L^{1\over4}}\]</p><p class="small">Main Sequence Relationship</p>
+                            \[M = ({\tau_☉ \over \tau})^{1 \over 3}\]<p class="small">Main Sequence Relationship</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Radius (\(R\))</h4>
+                            <p>The radius of the star.</p>
+                            <p>The units are in R☉, which means radius in relation to the Sun's radius.</p>
+                            <p></p>
+                            <br><p class="bolded">Equations:
+                            \[R=\sqrt{L \over ({T \over T_☉})^4}\]</p><p class="small">Stefan-Boltzmann Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Luminosity (\(L\))</h4>
+                            <p>The luminosity of the star. Luminosity is a measure of the star's total energy output.</p>
+                            <p>The units are in L☉, which means luminosity in relation to the Sun's luminosity.</p>
+                            <br><p class="bolded">Equations:
+                            \[L = R^2({T \over T_☉})^4\]</p><p class="small">Stefan-Boltzmann Law</p>
+                            \[L = M^4\]<p class="small">Main Sequence Relationship</p>
+                            \[L = {10^{-{M_V + M_{BC} - M_{V☉} \over 2.5}}}\]<p class="small">Brightness Ratio</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Absolute Visual Magnitude (\(M_V\))</h4>
+                            <p>How bright the star's visible light would appear from Earth if it was positioned
+                            10 parsecs (about 33 light years) away from Earth.</p>
+                            <br><p class="bolded">Equations:
+                            \[M_V = m - 5log_{10}({d \over 10})\]</p><p class="small">Distance Modulus</p>
+                            \[M_V = -2.5log_{10}(L) + M_{V☉} - M_{BC}\]<p class="small">Brightness Ratio</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Apparent Magnitude (\(m\))</h4>
+                            <p>How bright the star's appears from Earth. This measurement only takes visible light into account, which
+                            is light that has a wavelength of about 380 to 700 nanometers.</p>
+                            <br><p class="bolded">Equations:
+                            \[m = M_V + 5log_{10}({d \over 10})\]</p><p class="small">Distance Modulus</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Lifetime (\(\tau\))</h4>
+                            <p>The period of time between when the star is created (when it starts fusing hydrogen) and when it begins to
+                            run out of hydrogen, thus leaving the main sequence and starting to die.</p>
+                            <br><p class="bolded">Equations:
+                            \[\tau = {\tau_☉ \over M^3}\]</p><p class="small">Main Sequence Relationship</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Temperature (\(T\))</h4>
+                            <p>The temperature on the surface of the star. The temperature of the star is directly related to its peak
+                            wavelength and determines its color and spectral type (class). It can also be used to estimate bolometric correction.</p>
+                            <br><p class="bolded">Equations:
+                            \[T = {2.898 \over \lambda_{max}}\]</p><p class="small">Wien's Law</p>
+                            \[T = {L^{1\over4}T_☉ \over \sqrt{R}}\]<p class="small">Stefan-Boltzmann Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Peak Wavelength (\(\lambda_{max}\))</h4>
+                            <p>The peak wavelength is the wavelength in which the star emits the most energy. On a star's black-body curve,
+                            which shows the energy output of the star at all wavelengths, the wavelength where the curve's maximum occurs
+                            is called the peak wavelength. Peak wavelength is directly related to temperature.</p>
+                            <br><p class="bolded">Equations:
+                            \[\lambda_{max} = {2.898 \over T}\]</p><p class="small">Wien's Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Distance from Earth (\(d\))</h4>
+                            <p>The distance from Earth to the star.</p>
+                            <p>This calculation is made with trigonometry, using the Earth's orbital diameter as a base.</p>
+                            <br><p class="bolded">Equations:
+                            \[d = {3.26 \over \theta_{p}}\]</p><p class="small">Stellar Parallax</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Parallax Angle (\(\theta_{p}\))</h4>
+                            <p>Measures (in arcseconds) the change in the star's position in Earth's sky over 6 months.</p>
+                            <p>This method only works up to a certain distance before the parallax angle becomes too small
+                            to accurately measure.</p>
+                            <br><p class="bolded">Equations:
+                            \[\theta_{p} = {3.26 \over d}\]</p><p class="small">Stellar Parallax</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Bolometric Correction <br>(\(M_{BC}\))</h4>
+                            <p>A correction to convert absolute visual magnitude to bolometric magnitude. Bolometric magnitude is needed
+                            to calculate luminosity because it estimates to total amount of energy the star outputs, including wavelengths
+                            outside of visible light.</p>
+                            <br><table class="table table-sm" style="font-size: 12px;">
+                                <th>\(T\)</th>
+                                <th>\(M_{BC}\)</th>
+                                <tr>
+                                    <td>40,000 - 45,000</td>
+                                    <td>-4.0</td>
+                                </tr>
+                                <tr>
+                                    <td>28,000 - 40,000</td>
+                                    <td>-2.8</td>
+                                </tr>
+                                <tr>
+                                    <td>15,500 - 28,000</td>
+                                    <td>-1.5</td>
+                                </tr>
+                                <tr>
+                                    <td>9,900 - 15,500</td>
+                                    <td>-0.4</td>
+                                </tr>
+                                <tr>
+                                    <td>8,500 - 9,900</td>
+                                    <td>-0.12</td>
+                                </tr>
+                                <tr>
+                                    <td>7,400 - 8,500</td>
+                                    <td>-0.06</td>
+                                </tr>
+                                <tr>
+                                    <td>6,600 - 7,400</td>
+                                    <td>0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>6,000 - 6,600</td>
+                                    <td>-0.03</td>
+                                </tr>
+                                <tr>
+                                    <td>5,500 - 6,000</td>
+                                    <td>-0.07</td>
+                                </tr>
+                                <tr>
+                                    <td>4,900 - 5,500</td>
+                                    <td>-0.2</td>
+                                </tr>
+                                <tr>
+                                    <td>4,100 - 4,900</td>
+                                    <td>-0.6</td>
+                                </tr>
+                                <tr>
+                                    <td>3,500 - 4,100</td>
+                                    <td>-1.2</td>
+                                </tr>
+                                <tr>
+                                    <td>2,800 - 3,500</td>
+                                    <td>-2.3</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Class/Spectral Type and Color</h4>
+                            <p>Stars are classified according to their spectral characteristics, including color, temperature, and
+                            luminosity. There are 7 classes of stars (OBAFGKM), with O being the hottest and M being the coolest.
+                            Stars that have lower temperatures appear redder and more dim, while hotter stars are more blue and
+                            luminous.</p>
+                            <br><table class="table table-sm" style="font-size: 12px;">
+                                <th>Class</th>
+                                <th>Color</th>
+                                <th>\(T\)</th>
+                                <th>\(L\)</th>
+                                <tr style="background-color: #C2EAFF;">
+                                    <td>O</td>
+                                    <td>Light<br>Blue</td>
+                                    <td>28,000 - 45,000</td>
+                                    <td>60,000 - 100,000</td>
+                                </tr>
+                                <tr style="background-color: #EBF8FF;">
+                                    <td>B</td>
+                                    <td>Blue<br>White</td>
+                                    <td>10,000 - 28,000</td>
+                                    <td>75 - 60,000</td>
+                                </tr>
+                                <tr style="background-color: white;">
+                                    <td>A</td>
+                                    <td>White</td>
+                                    <td>7,500 - 10,000</td>
+                                    <td>7.25 - 75</td>
+                                </tr>
+                                <tr style="background-color: #FAF3DC;">
+                                    <td>F</td>
+                                    <td>Yellow<br>White</td>
+                                    <td>6,000 - 7,500</td>
+                                    <td>1.75 - 7.25</td>
+                                </tr>
+                                <tr style="background-color: #FFD319;">
+                                    <td>G</td>
+                                    <td>Yellow</td>
+                                    <td>4,900 - 6,000</td>
+                                    <td>0.55 - 1.75</td>
+                                </tr>
+                                <tr style="background-color: #FF5E13;">
+                                    <td>K</td>
+                                    <td>Orange<br>Yellow</td>
+                                    <td>3,500 - 4,900</td>
+                                    <td>0.09 - 0.55</td>
+                                </tr>
+                                <tr style="background-color: #FF2B00;">
+                                    <td>M</td>
+                                    <td>Orange<br>Red</td>
+                                    <td>2,400 - 3,500</td>
+                                    <td>0.005 - 0.09</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="holder" style="background-color: #FFFFFFAA; clear: both; margin: 50px;">
+                <h4 class="bolded">Constants</h4>
+                <p>
+                    Temperature of the Sun:&emsp;\(T_☉ = 5778 K\) &ensp;&emsp;
+                    Sun Lifetime:&emsp;\(\tau_☉ = 10*10^9 yrs\)<br>
+                    Sun Absolute Magnitude:&emsp;\(M_{V☉} = 4.75 mag\) &ensp;&emsp;
+                    Sun Mass:&emsp;\(1 M☉ = 1.989 * 10^{30} kg\)<br>
+                    Sun Radius:&emsp;\(1 R☉ = 695700 km\) (\(432288 mi\))
+                </p>
+            </div>
+        </div>
+
+        <script>
+            var img_back = new Image();
+            var c_back = document.getElementById("c_back");
+            var ctx_back = c_back.getContext("2d");
+
+            var c0 = document.getElementById("c0");
+            var ctx0 = c0.getContext("2d");
+
+            var c_text = document.getElementById("c_text");
+            var ctx_text = c_text.getContext("2d");
+
+            ctx_text.font = "bold 16px Arial";
+            ctx_text.fillStyle = "white";
+
+            img_back.src = 'star-background.jpg';
+
+            var img_o = new Image();
+            img_o.src = 'o_star.png';
+            var img_b = new Image();
+            img_b.src = 'b_star.png';
+            var img_a = new Image();
+            img_a.src = 'a_star.png';
+            var img_f = new Image();
+            img_f.src = 'f_star.png';
+            var img_g = new Image();
+            img_g.src = 'g_star.png';
+            var img_k = new Image();
+            img_k.src = 'k_star.png';
+            var img_m = new Image();
+            img_m.src = 'm_star.png';
+
+            var c_line = document.getElementById("c_line");
+            var ctx_line = c_line.getContext("2d");
+
+            ctx_line.strokeStyle = "white";
+            ctx_line.lineWidth = 2;
+            ctx_line.fillStyle = "white";
+            ctx_line.beginPath();
+            ctx_line.moveTo(275, 25);
+            ctx_line.lineTo(548, 25);
+            ctx_line.moveTo(275, 15);
+            ctx_line.lineTo(275, 35);
+            ctx_line.moveTo(548, 15);
+            ctx_line.lineTo(548, 35);
+            ctx_line.stroke();
+
+            ctx_line.font = "14px Arial";
+
+            shadBlue = "0px 0px 10px teal";
+            noShad = "none";
+
+
+            const c = 299792458; //Speed of light m/s
+	        const G = 6.67408*Math.pow(10, -11); //Graviational constant m^3/(kg*s^2)
+            const hBar = 1.0545718*Math.pow(10, -34); //Plank's constant / 2*pi
+            const k = 1.38064852*Math.pow(10, -23);
+            const sb = 5.6704*Math.pow(10, -8);//Boltzmann constant
+            const KS = 1361; //Solar constant W/m^2
+            const piSquared = Math.pow(Math.PI, 2);
+
+            var wh = 550;
+            var whinSR = 2;
+
+            var mass;
+            var radius;
+            var lumin;
+            var absmag;
+            var obsmag;
+            var life;
+            var temp;
+            var wave;
+            var parallax;
+            var distance;
+
+            var massFull = false;
+            var radiusFull = false;
+            var luminFull = false;
+            var absmagFull = false;
+            var obsmagFull = false;
+            var lifeFull = false;
+            var tempFull = false;
+            var waveFull = false;
+            var distanceFull = false;
+            var parallaxFull = false;
+
+            var classes = [];
+            classes.push({name: "M", image: img_m, color: "Orange Red", glowcol: "red",
+                    minT: 2400, maxT: 3500, minL: 0.001, maxL: 0.09});
+            classes.push({name: "K", image: img_k, color: "Orange Yellow", glowcol: "orangered",
+                    minT: 3500, maxT: 4900, minL: 0.09, maxL: 0.55});
+            classes.push({name: "G", image: img_g, color: "Yellow", glowcol: "orange",
+                    minT: 4900, maxT: 6000, minL: 0.55, maxL: 1.75});
+            classes.push({name: "F", image: img_f, color: "Yellow White", glowcol: "#FFFF66",
+                    minT: 6000, maxT: 7500, minL: 1.75, maxL: 7.25});
+            classes.push({name: "A", image: img_a, color: "White", glowcol: "white",
+                    minT: 7500, maxT: 10000, minL: 7.25, maxL: 75});
+            classes.push({name: "B", image: img_b, color: "Blue White", glowcol: "lightblue",
+                    minT: 10000, maxT: 28000, minL: 75, maxL: 60000});
+            classes.push({name: "O", image: img_o, color: "Light Blue", glowcol: "lightskyblue",
+                    minT: 28000, maxT: 45100, minL: 60000, maxL: 102001});
+
+            var bolocorrects = [];
+            bolocorrects.push({bc: -4.0, min: 40000, max: 45100});
+            bolocorrects.push({bc: -2.8, min: 28000, max: 40000});
+            bolocorrects.push({bc: -1.5, min: 15500, max: 28000});
+            bolocorrects.push({bc: -0.4, min: 9900, max: 15500});
+            bolocorrects.push({bc: -0.12, min: 8500, max: 9900});
+            bolocorrects.push({bc: -0.06, min: 7400, max: 8500});
+            bolocorrects.push({bc: 0, min: 6600, max: 7400});
+            bolocorrects.push({bc: -0.03, min: 6000, max: 6600});
+            bolocorrects.push({bc: -0.07, min: 5500, max: 6000});
+            bolocorrects.push({bc: -0.2, min: 4900, max: 5500});
+            bolocorrects.push({bc: -0.6, min: 4100, max: 4900});
+            bolocorrects.push({bc: -1.2, min: 3500, max: 4100});
+            bolocorrects.push({bc: -2.3, min: 2800, max: 3500});
+
+            var lights = [];
+            lights.push({name: "massLights", list: [{id: "luminTxt", col: "#A31621"}, {id: "lifeTxt", col: "#D58936"}]});
+            lights.push({name: "radiusLights", list: [{id: "tempTxt", col: "#A31621"}, {id: "luminTxt", col: "#A31621"}]});
+            lights.push({name: "luminLights", list: [{id: "tempTxt", col: "#A31621", bor: "#D58936"}, {id: "radiusTxt", col: "#A31621"},
+                    {id: "absmagTxt", col: "#D58936"}, {id: "massTxt", col: "#240115"}]});
+            lights.push({name: "absmagLights", list: [{id: "distanceTxt", col: "#A31621"}, {id: "obsmagTxt", col: "#A31621"},
+                    {id: "luminTxt", col: "#D58936"}, {id: "tempTxt", col: "#D58936"}]});
+            lights.push({name: "obsmagLights", list: [{id: "distanceTxt", col: "#A31621"}, {id: "absmagTxt", col: "#A31621"}]});
+            lights.push({name: "lifeLights", list: [{id: "massTxt", col: "#A31621"}]});
+            lights.push({name: "tempLights", list: [{id: "radiusTxt", col: "#A31621"}, {id: "luminTxt", col: "#A31621"}, {id: "waveTxt", col: "#D58936"}]});
+            lights.push({name: "waveLights", list: [{id: "tempTxt", col: "#A31621"}]});
+            lights.push({name: "distanceLights", list: [{id: "parallaxTxt", col: "#A31621"}, {id: "absmagTxt", col: "#D58936"},
+                {id: "obsmagTxt", col: "#D58936"}]});
+            lights.push({name: "parallaxLights", list: [{id: "distanceTxt", col: "#A31621"}]});
+
+            var blues = [{id: "massTxt", blue: false}, {id: "radiusTxt", blue: false}, {id: "luminTxt", blue: false}, {id: "absmagTxt", blue: false},
+                    {id: "obsmagTxt", blue: false}, {id: "lifeTxt", blue: false}, {id: "tempTxt", blue: false}, {id: "waveTxt", blue: false},
+                    {id: "distanceTxt", blue: false}, {id: "parallaxTxt", blue: false}];
+
+            var drawClass = classes[2];
+            var previousClass = drawClass;
+
+            function size(rad) {
+                return wh*rad/whinSR;
+            }
+            function pos(rad) {
+                return (wh-(wh*rad/whinSR))/2;
+            }
+
+            function drawStar(rad, aclass) {
+                ctx_text.clearRect(0, 0, wh, 150);
+                if (tempFull || luminFull) {
+                    ctx_text.fillText("Class:  " + aclass.name, 30, 30);
+                    ctx_text.fillText("Star Color:  " + aclass.color, 325, 30);
+                } else {
+                    ctx_text.fillText("Class:  Unknown", 30, 30);
+                    ctx_text.fillText("Star Color:  Unknown", 325, 30);
+                }
+                ctx0.clearRect(0,0,wh,wh);
+
+                ctx0.shadowColor = aclass.glowcol;
+                ctx0.shadowBlur = size(rad)*.3;
+                ctx0.strokeStyle = "transparent";
+                ctx0.arc(pos(rad)+size(rad)/2, pos(rad)+size(rad)/2, (size(rad)/2)*.75, 0, Math.PI*2.);
+                ctx0.stroke();
+                ctx0.fillStyle = "transparent";
+                ctx0.fill();
+
+                var img_op = 0;
+                var loopNum = 0;
+                if (drawClass != previousClass) {
+                    var id = setInterval(frame, 5);
+                    function frame() {
+                        if (img_op == 1) {
+                            clearInterval(id);
+                        } else {
+                            img_op = .01*loopNum;
+                            loopNum++;
+                            ctx0.clearRect(0,0,wh,wh);
+                            ctx0.globalAlpha = img_op;
+                            ctx0.drawImage(aclass.image, pos(rad), pos(rad), size(rad), size(rad));
+                        }
+                    }
+                } else {
+                    ctx0.drawImage(aclass.image, pos(rad), pos(rad), size(rad), size(rad));
+                }
+
+                ctx_line.clearRect(390, 30, 100, 20);
+                ctx_line.fillText(whinSR + ' R☉', 405, 40);
+            }
+
+            function reset() {
+                document.getElementById("massTxt").value = "";
+        		document.getElementById("radiusTxt").value = "";
+                document.getElementById("luminTxt").value = "";
+                document.getElementById("absmagTxt").value = "";
+                document.getElementById("obsmagTxt").value = "";
+                document.getElementById("lifeTxt").value = "";
+                document.getElementById("tempTxt").value = "";
+                document.getElementById("waveTxt").value = "";
+                document.getElementById("distanceTxt").value = "";
+                document.getElementById("parallaxTxt").value = "";
+
+                document.getElementById("massTxt").style.boxShadow = noShad;
+                document.getElementById("radiusTxt").style.boxShadow = noShad;
+                document.getElementById("luminTxt").style.boxShadow = noShad;
+                document.getElementById("absmagTxt").style.boxShadow = noShad;
+                document.getElementById("obsmagTxt").style.boxShadow = noShad;
+                document.getElementById("lifeTxt").style.boxShadow = noShad;
+                document.getElementById("tempTxt").style.boxShadow = noShad;
+                document.getElementById("waveTxt").style.boxShadow = noShad;
+                document.getElementById("distanceTxt").style.boxShadow = noShad;
+                document.getElementById("parallaxTxt").style.boxShadow = noShad;
+
+                whinSR = 2;
+
+                calculate();
+            }
+
+            function calculate() {
+                mass = document.getElementById("massTxt").value;
+                radius = document.getElementById("radiusTxt").value;
+                lumin = document.getElementById("luminTxt").value;
+                absmag = document.getElementById("absmagTxt").value;
+                obsmag = document.getElementById("obsmagTxt").value;
+                life = document.getElementById("lifeTxt").value;
+                temp = document.getElementById("tempTxt").value;
+                wave = document.getElementById("waveTxt").value;
+                distance = document.getElementById("distanceTxt").value;
+                parallax = document.getElementById("parallaxTxt").value;
+
+                (document.getElementById("massTxt").value === "") ? massFull = false : massFull = true;
+                (document.getElementById("radiusTxt").value === "") ? radiusFull = false : radiusFull = true;
+                (document.getElementById("luminTxt").value === "") ? luminFull = false : luminFull = true;
+                (document.getElementById("absmagTxt").value === "") ? absmagFull = false : absmagFull = true;
+                (document.getElementById("obsmagTxt").value === "") ? obsmagFull = false : obsmagFull = true;
+                (document.getElementById("lifeTxt").value === "") ? lifeFull = false : lifeFull = true;
+                (document.getElementById("tempTxt").value === "") ? tempFull = false : tempFull = true;
+                (document.getElementById("waveTxt").value === "") ? waveFull = false : waveFull = true;
+                (document.getElementById("distanceTxt").value === "") ? distanceFull = false : distanceFull = true;
+                (document.getElementById("parallaxTxt").value === "") ? parallaxFull = false : parallaxFull = true;
+
+                for (i=0; i<blues.length; i++) {
+                    blues[i].blue = false;
+                }
+
+        		//Calling all of the methods that do the calculations
+                if (parallaxFull) {
+                    distanceCalc();
+                }
+                if (waveFull) {
+                    tempCalc();
+                }
+                if (lifeFull) {
+                    massCalc();
+                }
+                if (obsmagFull && distanceFull) {
+                    absmagCalc();
+                }
+
+                luminCalc();
+                if (!obsmagFull || !distanceFull) {
+                    absmagCalc();
+                }
+                if (!parallaxFull) {
+                    distanceCalc();
+                }
+                if (!waveFull) {
+                    tempCalc();
+                }
+                if (!lifeFull) {
+                    massCalc();
+                }
+
+        		radiusCalc();
+        		waveCalc();
+                lifeCalc();
+                obsmagCalc();
+        		parallaxCalc();
+
+                updateStar();
+        	}
+
+            function massCalc() {
+                //Calculating the mass of the planet using different equations, based on what information is available
+                if (!massFull && (luminFull || lifeFull)) {
+                    if (luminFull) {
+                        mass = Math.pow(lumin, 0.25);
+                    } else {
+                        mass = Math.cbrt((10*Math.pow(10, 9))/life);
+                    }
+
+                    document.getElementById("massTxt").value = sigfig(mass);
+                    document.getElementById("massTxt").style.boxShadow = shadBlue;
+                    massFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "massTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("massTxt").style.boxShadow = noShad;
+                }
+        	}
+
+            function radiusCalc() {
+                //Calculating the radius using different equations, based on what information is available
+                if (!radiusFull && (tempFull && luminFull)) {
+                    radius = (Math.pow((lumin/Math.pow((temp/5778), 4)), .5));
+
+                    document.getElementById("radiusTxt").value = sigfig(radius);
+                    document.getElementById("radiusTxt").style.boxShadow = shadBlue;
+                    radiusFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "radiusTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("radiusTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function tempCalc() {
+                //Calculating the temperature using different equations, based on what information is available
+                if (!tempFull && ((radiusFull && luminFull) || (radiusFull && massFull) || waveFull)) {
+                    if (waveFull) {
+                        temp = (2898000/wave);
+                    } else if (radiusFull && luminFull) {
+                        temp = (Math.pow((lumin/Math.pow(radius, 2)), .25)*5778);
+                    } else {
+                        temp = (Math.pow(Math.pow(mass, 4)/Math.pow(radius, 2), .25)*5778);
+                    }
+
+                    document.getElementById("tempTxt").value = sigfig(temp);
+                    document.getElementById("tempTxt").style.boxShadow = shadBlue;
+                    tempFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "tempTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("tempTxt").style.boxShadow = noShad;
+                }
+    		}
+
+            function luminCalc() {
+                //Calculating the temperature using different equations, based on what information is available
+                if (!luminFull && ((radiusFull && tempFull) || massFull || (absmagFull && tempFull))) {
+                    lumin = 0;
+                    if (radiusFull && tempFull) {
+                        lumin = (Math.pow((temp)/5778, 4)*Math.pow(radius, 2));
+                    } else if (massFull) {
+                        lumin = Math.pow(mass, 4);
+                    } else {
+                        for (i=0; i<bolocorrects.length; i++) {
+                            if (temp > bolocorrects[i].min && temp < bolocorrects[i].max) {
+                                lumin = (Math.pow(10, -((parseFloat(absmag) + bolocorrects[i].bc) - 4.75)/2.5));
+                            }
+                        }
+                        if (lumin == 0) {
+                            lumin = (1/Math.pow(10, (absmag - 4.75)/2.5));
+                        }
+                    }
+
+                    document.getElementById("luminTxt").value = sigfig(lumin);
+                    document.getElementById("luminTxt").style.boxShadow = shadBlue;
+                    luminFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "luminTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("luminTxt").style.boxShadow = noShad;
+                }
+    		}
+
+            function absmagCalc() {
+                //Calculating the density using different equations, based on what information is available
+                if (!absmagFull && ((distanceFull && obsmagFull) || (luminFull && tempFull))) {
+                    if (distanceFull && obsmagFull) {
+                        absmag = (parseFloat(obsmag) - 5*Math.log10(distance/(10*3.26156)));
+                    } else {
+                        absmag = Math.pi;
+                        absmag = (2.5*Math.log10(1/lumin)+4.75);
+                        for (i=0; i<bolocorrects.length; i++) {
+                            if (temp > bolocorrects[i].min && temp < bolocorrects[i].max) {
+                                absmag = (2.5*Math.log10(1/lumin)+4.75-bolocorrects[i].bc);
+                            }
+                        }
+                        if (absmag == Math.pi) {
+                            absmag = (2.5*Math.log10(1/lumin)+4.75);
+                        }
+                    }
+
+                    document.getElementById("absmagTxt").value = sigfig(absmag);
+                    document.getElementById("absmagTxt").style.boxShadow = shadBlue;
+                    absmagFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "absmagTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("absmagTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function obsmagCalc() {
+                //Calculating the density using different equations, based on what information is available
+                if (!obsmagFull && (distanceFull && absmagFull)) {
+                    obsmag = (5*Math.log10(distance/32.6156) + parseFloat(absmag));
+
+                    document.getElementById("obsmagTxt").value = sigfig(obsmag);
+                    document.getElementById("obsmagTxt").style.boxShadow = shadBlue;
+                    obsmagFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "obsmagTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("obsmagTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function distanceCalc() {
+                //Calculating the distance to earth using different equations, based on what information is available
+        		//Parallax angle
+        		if (!distanceFull && (parallaxFull || (absmagFull && obsmagFull))) {
+        			if (parallaxFull) {
+                        distance = ((1/parallax)*3.26156);
+                    } else {
+                        distance = (Math.pow(10, (parseFloat(obsmag)-parseFloat(absmag))/5)*10*3.26156);
+                    }
+
+                    document.getElementById("distanceTxt").value = sigfig(distance);
+                    document.getElementById("distanceTxt").style.boxShadow = shadBlue;
+                    distanceFull = true;
+                    // tooltipClear("distanceTxt");
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "distanceTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("distanceTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function parallaxCalc() {
+                //Calculating the distance to earth using different equations, based on what information is available
+        		//Parallax angle
+        		if (!parallaxFull && distanceFull) {
+
+                    parallax = 1/(distance/3.26156);
+
+                    document.getElementById("parallaxTxt").value = sigfig(parallax);
+                    document.getElementById("parallaxTxt").style.boxShadow = shadBlue;
+                    parallaxFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "parallaxTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("parallaxTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function waveCalc() {
+                //Calculating the distance to earth using different equations, based on what information is available
+        		//Parallax angle
+        		if (!waveFull && tempFull) {
+
+                    wave = (2898000/temp);
+
+                    document.getElementById("waveTxt").value = sigfig(wave);
+                    document.getElementById("waveTxt").style.boxShadow = shadBlue;
+                    waveFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "waveTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("waveTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function lifeCalc() {
+                if (!lifeFull && massFull) {
+
+                    life = ((10*Math.pow(10, 9))/Math.pow(mass, 3));
+
+                    document.getElementById("lifeTxt").value = sigfig(life);
+                    document.getElementById("lifeTxt").style.boxShadow = shadBlue;
+                    lifeFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "lifeTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("lifeTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function updateStar() {
+                var drawRadius = 1;
+                var error = false;
+                whinSR = 2;
+                previousClass = drawClass;
+                drawClass = classes[2];
+
+                //Drawing planet according to radius
+                if (radiusFull) {
+                    drawRadius = radius;
+
+                    if (radius < 2) {
+                        whinSR = 2;
+                    } else if (radius < 5) {
+                        whinSR = 5;
+                    } else if (radius < 20) {
+                        whinSR = 20;
+                    } else {
+                        whinSR = 40;
+                    }
+                }
+
+                if (luminFull) {
+                    for (i=0; i<classes.length; i++) {
+                        if (classes[i].minL <= lumin && classes[i].maxL > lumin) {
+                            drawClass = classes[i];
+                        }
+                    }
+                    if (lumin > classes[6].maxL) {
+                        drawClass = {name: "Not Possible (too bright)", image: img_o, color: "N/A", glowcol: "lightskyblue"};
+                        error = true;
+                    } else if (lumin < classes[0].minL) {
+                        drawClass = {name: "Not Possible (too dim)", image: img_m, color: "N/A", glowcol: "red"};
+                        error = true;
+                    }
+                }
+                if (tempFull && !error) {
+                    for (i=0; i<classes.length; i++) {
+                        if (classes[i].minT <= temp && classes[i].maxT > temp) {
+                            drawClass = classes[i];
+                        }
+                    }
+                    if (temp > classes[6].maxT) {
+                        drawClass = {name: "Not Possible (too hot)", image: img_o, color: "N/A", glowcol: "lightskyblue"};
+                        error = true;
+                    } else if (temp < classes[0].minT) {
+                        drawClass = {name: "Not Possible (too cold)", image: img_m, color: "N/A", glowcol: "red"};
+                        error = true;
+                    }
+                }
+
+                drawStar(drawRadius, drawClass);
+            }
+
+            function noShadow(element) {
+                element.style.boxShadow = noShad;
+                var txtBox = element.id.substring(0, element.id.length-3) + "Txt";
+
+                for (i=0; i<blues.length; i++) {
+                    if (blues[i].id == txtBox) {
+                        blues[i].blue = false;
+                    }
+                }
+            }
+
+            function lightUp(element) {
+                var lightList = [];
+                var character = element.id.substring(0, element.id.length-3);
+                var lightListName = character + "Lights";
+                var suggestId = character + "Suggest";
+                var explainId = character + "Ex";
+
+                var ex_h = 0;
+                var ex_op = 0;
+                var loopNum = 0;
+                var id = setInterval(frame, 0);
+                document.getElementById(explainId).style.border = "3px solid white";
+                document.getElementById(explainId).style.borderRadius = "10px";
+                document.getElementById(explainId).children[0].style.opacity = 1;
+                function frame() {
+                    if (ex_h == 40) {
+                        if (ex_op == 1) {
+                            clearInterval(id);
+                        } else {
+                            ex_op = .02*loopNum;
+                            loopNum++;
+                            document.getElementById(explainId).style.opacity = ex_op;
+                        }
+                    } else {
+                        ex_h += 8;
+                        document.getElementById(explainId).style.height = ex_h + "px";
+                        document.getElementById(explainId).style.padding = ex_h/2 + "px";
+                    }
+                }
+
+                for (i=0; i<lights.length; i++) {
+                    if (lights[i].name == lightListName) {
+                        lightList = lights[i].list;
+                    }
+                }
+
+                for (i=0; i < lightList.length; i++) {
+                    document.getElementById(lightList[i].id).style.boxShadow = "0px 0px 10px " + lightList[i].col;
+                    if (lightList[i].bor != null) {
+                        document.getElementById(lightList[i].id).style.boxShadow = "-3px -3px 10px " + lightList[i].col +
+                                ", 3px 3px 10px " + lightList[i].bor;
+                    }
+                }
+
+                document.getElementById(suggestId).style.visibility = "visible";
+            }
+
+            function lightDown(element) {
+                var lightList = [];
+                var character = element.id.substring(0, element.id.length-3);
+                var lightListName = character + "Lights";
+                var suggestId = character + "Suggest";
+                var explainId = character + "Ex";
+
+                document.getElementById(explainId).children[0].style.opacity = 0;
+                var ex_h = 40;
+                var ex_op = 1;
+                var loopNum = 0;
+                var id = setInterval(frame, 0);
+                document.getElementById(explainId).style.border = "0px";
+                function frame() {
+                    if (ex_op == 0) {
+                        if(ex_h == 0) {
+                            clearInterval(id);
+                        } else {
+                            ex_h -= 8;
+                            document.getElementById(explainId).style.height = ex_h + "px";
+                            document.getElementById(explainId).style.padding = ex_h/2 + "px";
+                        }
+                    } else {
+                        ex_op = .02*loopNum;
+                        loopNum++;
+                        document.getElementById(explainId).style.opacity = ex_op;
+                    }
+                }
+
+                for (i=0; i<lights.length; i++) {
+                    if (lights[i].name == lightListName) {
+                        lightList = lights[i].list;
+                    }
+                }
+
+                for (i=0; i < lightList.length; i++) {
+                    for (j=0; j<blues.length; j++) {
+                        if (lightList[i].id == blues[j].id) {
+                            if (blues[j].blue) {
+                                document.getElementById(lightList[i].id).style.boxShadow = shadBlue;
+                            } else {
+                                document.getElementById(lightList[i].id).style.boxShadow = noShad;
+                            }
+                        }
+                    }
+                }
+
+                document.getElementById(suggestId).style.visibility = "hidden";
+            }
+
+            //Solar mass to kilograms
+        	function SMtoKG(SM) {
+        		SM = SM*2*Math.pow(10, 30);
+        		return SM;
+        	}
+
+        	//Kilograms to solar mass
+        	function KGtoSM(KG) {
+        		KG = KG*5*Math.pow(10, -31);
+        		return KG;
+        	}
+
+        	//Kilometers to meters
+        	function KMtoM(KM) {
+        		KM = KM*1000;
+        		return KM;
+        	}
+
+        	//Meters to kilometers
+        	function MtoKM(M) {
+        		M = M/1000;
+        		return M;
+        	}
+
+        	//Solar radius to meters
+        	function SRtoM(SR) {
+        		SR = SR*696340000;
+        		return SR;
+        	}
+
+        	//Meters to solar radius
+        	function MtoSR(M) {
+        		M = M/696340000;
+        		return M;
+        	}
+
+            //Writes everything with sig figs
+            function sigfig(num) {
+                if (Math.abs(num) < 0.01) {
+                    return num.toExponential(2);
+                } else if (Math.abs(num) < 0.1) {
+                    return num.toFixed(4);
+                } else if (Math.abs(num) < 1) {
+                    return num.toFixed(3);
+                } else if (Math.abs(num) < 10) {
+                    return num.toFixed(2);
+                } else if (Math.abs(num) < 100) {
+                    return num.toFixed(1);
+                } else if (Math.abs(num) < 1000) {
+                    return Math.round(num);
+                } else if (Math.abs(num) < 10000) {
+                    return Math.round(num/10)*10;
+                } else if (Math.abs(num) < 100000) {
+                    return Math.round(num/100)*100;
+                } else if (Math.abs(num) < 1000000) {
+                    return Math.round(num/1000)*1000;
+                } else {
+                    return num.toExponential(2);
+                }
+            }
+        </script>
+    </body>
+</html>

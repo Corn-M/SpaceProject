@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="stylesheet_planets.css">
+        <title>Black Hole Calculations</title>
+
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </head>
+    <body onload="drawBH(types[0]); calculate();">
+        <header>
+            <h1>Create Your Own Black Hole!</h1>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row form-group heading">
+                <div class="col-md-3 col-sm-12">
+                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="planet_calc.html"><button type="button" class="btn btn-outline-light btn-block">Planet Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="star_calc.html"><button type="button" class="btn btn-outline-light btn-block">Star Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="black_hole_calc.html"><button type="button" class="btn btn-outline-light btn-block">Black Hole Calculations</button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="planet-holder">
+            <div class="float-right">
+                <div class="canvasHolderImage">
+
+                    <canvas class="canvas" id="c_back" width="550" height="550" style="border:0px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+
+                    <canvas class="canvas" id="c0" width="550" height="550" style="border:0px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+
+                    <canvas class="canvas" id="c_text" width="550" height="550" style="border:1px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+                </div>
+                <div class="canvasHolderImage" style="height: 50px; width: 500px; margin-right: 0px; margin-top: 0px;">
+
+                    <canvas class="canvas" id="c_line" width="550" height="50" style="border:0px solid #d3d3d3;">
+                        Your brow form-groupser does not support the HTML5 canvas tag.</canvas>
+                </div>
+                <div class="holder buttons" style="margin-left: 140px; margin-bottom: 40px; width: 265px;">
+                    <input type='button' class="btn btn-outline-primary btn-lg" onclick="calculate();" value='Calculate'>&emsp;
+                    <input type='button' class="btn btn-outline-secondary btn-lg" onclick="reset();" value='Reset'>
+                </div>
+            </div>
+
+            <div class="float-left holder planet-calc" style="padding-left: 30px; padding-right: 30px;">
+                <h3 class="center-col bolded">Enter information about your black hole</h3>
+                <p class="center-col" style="font-size: 14px;">
+                    Enter some characteristics about your black hole and click calculate to see what properties those values can calculate and what your
+                    black hole might look like!
+                </p>
+                <p class="center-col" style="font-size: 14px;">
+                    The groups of characteristics needed to calculate a property automatically are highlighted when you select it and suggested values
+                    are provided for manual entry.
+                </p><br>
+                <p>
+                    Mass&emsp;
+                    <input type='number' min="0" step="any" id='massTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> M☉
+                    <i id='massSuggest'>&ensp;3 - 40e9 M☉</i>
+                </p>
+                <div class="expand" id="massEx" style="background-color: #FFFFFFAA;">
+                    <p>Mass of the black hole compared to the sun&ensp;<strong>(Cygnus X-1 = 15M☉)</strong></p>
+                </div>
+                <p>
+                    Schwarzchild Radius&emsp;
+                    <input type='number' min="0" step="any" id='radiusTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> km
+                    <i id='radiusSuggest'>&ensp;12 - 1e11 km</i>
+                </p>
+                <div class="expand" id="radiusEx" style="background-color: #FFFFFFAA;">
+                    <p>Distance from black hole's center to its event horizon&ensp;<strong>(Cygnus X-1 = 44km)</strong></p>
+                </div>
+                <p>
+                    Temperature&emsp;
+                    <input type='number' min="3000" step="any" id='tempTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> K
+                    <i id='tempSuggest'>&ensp;1e-18 - 1e-8 K</i>
+                </p>
+                <div class="expand" id="tempEx" style="background-color: #FFFFFFAA;">
+                    <p>Temperature of the black hole due to Hawking radiation&ensp;<strong>(Cygnus X-1 = 4.13e-9K)</strong></p>
+                </div>
+                <p>
+                    Surface Gravity&emsp;
+                    <input type='number' min="3000" step="any" id='gravityTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> m/s<sup>2</sup>
+                    <i id='gravitySuggest'>&ensp;400 - 4e12 m/s<sup>2</sup></i>
+                </p>
+                <div class="expand" id="gravityEx" style="background-color: #FFFFFFAA;">
+                    <p>Acceleration seen at event horizon by distant observer&ensp;<strong>(Cygnus X-1 = 1.02e12m/s<sup>2</sup>)</strong></p>
+                </div>
+                <p>
+                    Lifetime&emsp;
+                    <input type='number' min="1000" step="any" id='lifeTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> years
+                    <i id='lifeSuggest'>&ensp;1e69 - 1e99 years</i>
+                </p>
+                <div class="expand" id="lifeEx" style="background-color: #FFFFFFAA;">
+                    <p>How long before the black hole evaporates&ensp;<strong>(Cygnus X-1 = 6.99e70yrs)</strong></p>
+                </div>
+                <p>
+                    Companion Star Mass&emsp;
+                    <input type='number' min="0" step="any" id='sMassTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> M☉
+                    <i id='sMassSuggest'>&ensp;0.08 - 60 M☉</i>
+                </p>
+                <div class="expand" id="sMassEx" style="background-color: #FFFFFFAA;">
+                    <p>Mass of any star orbiting the black hole compared to the sun&ensp;<strong>(Cygnus X-1 = 19M☉)</strong></p>
+                </div>
+                <p>
+                    Orbital Radius of Companion Star&emsp;
+                    <input type='number' step="any" id='orbitRadTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> AU
+                    <i id='orbitRadSuggest'>&ensp;0.01 - 5000 AU</i>
+                </p>
+                <div class="expand" id="orbitRadEx" style="background-color: #FFFFFFAA;">
+                    <p>Distance between a companion star and the black hole&ensp;<strong>(Cygnus X-1 = 0.2AU)</strong></p>
+                </div>
+                <p>
+                    Orbital Period of Companion Star&emsp;
+                    <input type='number' step="any" id='periodTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> years
+                    <i id='periodSuggest'>&ensp;0.001 - 200 years</i>
+                </p>
+                <div class="expand" id="periodEx" style="background-color: #FFFFFFAA;">
+                    <p>Time it takes for a companion star to orbit the black hole&ensp;<strong>(Cygnus X-1 = 0.015yrs)</strong></p>
+                </div>
+                <p>
+                    Distance from Earth&emsp;
+                    <input type='number' min="0" step="any" id='distanceTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> ly
+                    <i id='distanceSuggest'>&ensp;4 - 30,000 ly</i>
+                </p>
+                <div class="expand" id="distanceEx" style="background-color: #FFFFFFAA;">
+                    <p>Distance from Earth to a distant black hole&ensp;<strong>(Cygnus X-1 = 6500ly)</strong></p>
+                </div>
+                <p>
+                    Parallax Angle&emsp;
+                    <input type='number' step="any" id='parallaxTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> "
+                    <i id='parallaxSuggest'>&ensp;0.0001 - 0.8"</i>
+                </p>
+                <div class="expand" id="parallaxEx" style="background-color: #FFFFFFAA;">
+                    <p>Change in position in Earth's sky over 6 months&ensp;<strong>(Cygnus X-1 = 0.0005")</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="holder info">
+            <h2 class="center-col bolded">Notes</h2>
+            <div class="holder" style="background-color: #FFFFFFAA; margin: 50px;">
+                <h4 class="bolded">Black Hole Characteristics</h4>
+                <table class="table">
+                    <th>Characteristic</th>
+                    <th>Cygnus X-1</th>
+                    <th>Sagittarius A*</th>
+                    <th>V404 Cygni</th>
+                    <th>Messier 87</th>
+                    <th>HLX-1</th>
+                    <tr>
+                        <th>Mass (M☉)</th>
+                        <td>15</td>
+                        <td>4,000,000</td>
+                        <td>9</td>
+                        <td>6,500,000,000</td>
+                        <td>100 - 100,000</td>
+                    </tr>
+                    <tr>
+                        <th>Schwarzchild Radius (km)</th>
+                        <td>44</td>
+                        <td>1.20e7</td>
+                        <td>27</td>
+                        <td>1.95e10</td>
+                        <td>300 - 300,000</td>
+                    </tr>
+                    <tr>
+                        <th>Temperature (K)</th>
+                        <td>4.13e-9</td>
+                        <td>1.53e-14</td>
+                        <td>6.82e-9</td>
+                        <td>9.44e-18</td>
+                        <td>6.13e-13 - 6.13e-10</td>
+                    </tr>
+                    <tr>
+                        <th>Surface Gravity (m/s<sup>2</sup>)</th>
+                        <td>1.02e12</td>
+                        <td>3.78e6</td>
+                        <td>1.68e12</td>
+                        <td>2330</td>
+                        <td>1.51e8 - 1.51e11</td>
+                    </tr>
+                    <tr>
+                        <th>Lifetime (yrs)</th>
+                        <td>6.99e70</td>
+                        <td>1.37e87</td>
+                        <td>1.56e70</td>
+                        <td>5.86e96</td>
+                        <td>2.13e73 - 2.13e82</td>
+                    </tr>
+                    <tr>
+                        <th>Companion Star Mass (M☉)</th>
+                        <td>19</td>
+                        <td>14</td>
+                        <td>0.7</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <th>Orbital Radius (AU)</th>
+                        <td>0.20</td>
+                        <td>1020</td>
+                        <td>9,600</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <th>Orbital Period (yrs)</th>
+                        <td>0.015</td>
+                        <td>16</td>
+                        <td>0.018</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <th>Distance (ly)</th>
+                        <td>6,500</td>
+                        <td>26,700</td>
+                        <td>7,800</td>
+                        <td>55,000,000</td>
+                        <td>290,000,000</td>
+                    </tr>
+                    <tr>
+                        <th>Parallax</th>
+                        <td>0.0005"</td>
+                        <td>0.0001"</td>
+                        <td>0.0004"</td>
+                        <td>5.93e-8"</td>
+                        <td>1.12e-8"</td>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <td>Stellar</td>
+                        <td>Supermassive</td>
+                        <td>Stellar</td>
+                        <td>Supermassive</td>
+                        <td>Intermediate</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="container-fluid" align="center">
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Mass (\(M\))</h4>
+                            <p>The mass of the black hole. Most characteristics of black holes are determined by its mass.
+                            The masses of black holes can vary widely, but most black holes that we know of are either stellar or supermassive.</p>
+                            <p>The units are in M☉, which means mass in relation to the Sun's mass.</p>
+                            <br><p class="bolded">Equations:
+                            \[M = {4\pi^2a^3 \over GP^2} - M_S\]</p><p class="small">Kepler’s Third Law</p>
+                            \[M = {c^2 R_s \over 2G}\]<p class="small">Schwarzchild Solution (Radius)</p>
+                            \[M = {1 \over T}{c^3\hbar \over 8k\pi G}\]<p class="small">Hawking Radiation (Temperature)</p>
+                            \[M = {1 \over \kappa}{c^4 \over 4G}\]<p class="small">Schwarzchild Solution (Surface Gravity)</p>
+                            \[M = \sqrt[3]{\tau \hbar c^4 \over 5120\pi G^2}\]<p class="small">Hawking Radiation (Lifetime)</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Radius (\(R_s\))</h4>
+                            <p>The perceived radius of the black hole. The Schwarzchild radius (aka the event horizon) is the point where
+                            the escape velocity of the black hole is equal to the speed of light. Therefore, light is unable to escape
+                            the black hole's gravitational pull, so the black hole appears to be a black sphere, with a radius equal
+                            to the Schwarzchild radius. Beyond the Schwarzchild radius, the black hole's mass is pushed to a one-dimensional
+                            point at its center called the singularity.</p>
+                            <p></p>
+                            <br><p class="bolded">Equations:
+                            \[R_s = {c^2 M \over 2G}\]</p><p class="small">Schwarzchild Solution</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Temperature (\(T\))</h4>
+                            <p>The temperature of the black hole. The temperature of a black hole is a measure of the energy that is outputted by
+                            that black hole. This energy is known as Hawking radiation. Hawking radiation comes from particle pairs that are formed
+                            near the event horizon of black hole. When an antiparticle falls into the black hole, the pair is unable to annihilate,
+                            and the particle that escapes appears to be energy that has been emitted by the black hole.</p>
+                            <br><p class="bolded">Equations:
+                            \[T = {1 \over M}{c^3\hbar \over 8k\pi G}\]</p><p class="small">Hawking Radiation</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Surface Gravity (\(\kappa\))</h4>
+                            <p>Because black holes do not have a surface, a black hole's surface gravity is very different from a planet's.
+                            The surface gravity of a black hole is a measure of the apparent gravitational acceleration at the black hole's event
+                            horizon from the point of view of a distant observer. Because of this, time dilation is taken into effect. More
+                            massive black holes will have a greater time dilation effect, so objects falling into them will appear to move more
+                            slowly. Therefore, a black hole's mass is suprisingly inversely proportional to its surface gravity.</p>
+                            <br><p class="bolded">Equations:
+                            \[\kappa = {1 \over M}{c^4 \over 4G}\]</p><p class="small">Schwarzchild Solution</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Lifetime (\(\tau\))</h4>
+                            <p>The amount of time before a black hole evaporates. Because of Hawking radiation, black holes slowly lose mass over
+                            time, meaning they will eventually run out of mass and evaporate. When an antiparticle from a particle pair falls into
+                            the black hole, the particle that escapes becomes energy that contributes to the black hole's temperature. Therefore,
+                            the antiparticle must become negative energy, which takes mass away from the black hole according to \(E=mc^2\)</p>
+                            <br><p class="bolded">Equations:
+                            \[\tau = {5120\pi G^2 M^3 \over \hbar c^4}\]</p><p class="small">Hawking Radiation</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Companion Star Mass<br>(\(M_s\))</h4>
+                            <p>The mass of any star orbiting the black hole. Stellar black holes have masses similar to a star and orbit their
+                            companion star similar to a binary star system. However, intermediate and supermassive black holes lie at the
+                            center of globular clusters and galaxies, so they have millions to billions of stars orbiting them.</p>
+                            <p>Because supermassive black holes are so massive, a mass for the companion star is irrelevant.</p>
+                            <br><p class="bolded">Equations:
+                            \[M_S = {4\pi^2a^3 \over GP^2} - M\]</p><p class="small">Kepler’s Third Law</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Orbital Period (\(P\))</h4>
+                            <p>The time it takes for the companion star to orbit the black hole.</p>
+                            <br><p class="bolded">Equations:
+                            \[P = \sqrt{4\pi^2a^3 \over G(M+M_S)}\]</p><p class="small">Kepler’s Third Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Orbital Radius (\(a\))</h4>
+                            <p>The distance between the center of the ellipse created by the star's orbit around the black hole and the point
+                                on the ellipse furthest from the center. Also called the semi-major axis.</p>
+                            <br><p class="bolded">Equations:
+                            \[a = \sqrt[3]{GP^2(M+M_S) \over 4\pi^2}\]</p><p class="small">Kepler’s Third Law</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Distance from Earth (\(d\))</h4>
+                            <p>The distance from Earth to the star.</p>
+                            <p>This calculation is made with trigonometry, using the Earth's orbital diameter as a base.</p>
+                            <br><p class="bolded">Equations:
+                            \[d = {3.26 \over \theta_{p}}\]</p><p class="small">Stellar Parallax</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Parallax Angle (\(\theta_{p}\))</h4>
+                            <p>Measures (in arcseconds) the change in the star's position in Earth's sky over 6 months.</p>
+                            <p>This method only works up to a certain distance before the parallax angle becomes too small
+                            to accurately measure.</p>
+                            <br><p class="bolded">Equations:
+                            \[\theta_{p} = {3.26 \over d}\]</p><p class="small">Stellar Parallax</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
+                            <h4 class="bolded">Types of Black Holes</h4>
+                            <p>There are three known types of black holes. The most common is stellar black holes, which are the least
+                            massive and are formed when high mass stars die. Supermassive black holes are the second most common, but
+                            the most massive, and are found at the center of most galaxies. Intermediate black holes are the most rare
+                            and the most recently discovered. They are expected to form at the centers of globular clusters.</p>
+                            <br><table class="table table-sm" style="font-size: 12px;">
+                                <th>Types</th>
+                                <th>\(M\)</th>
+                                <tr>
+                                    <td>Stellar</td>
+                                    <td>~3 - 10</td>
+                                </tr>
+                                <tr>
+                                    <td>Intermediate</td>
+                                    <td>100 - 1,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Supermassive</td>
+                                    <td>1,000,000 - ~40,000,000</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="holder" style="background-color: #FFFFFFAA; clear: both; margin: 50px;">
+                <h4 class="bolded">Constants</h4>
+                <p>
+                    Gravitational Constant:&emsp;\(G = 6.674*10^{-11} {m^3\over{kg*s^2}}\) &ensp;&emsp;
+                    Speed of Light:&emsp;\(c = 2.998*10^8 {m \over s}\)<br>
+                    Reduced Planck Constant:&emsp;\(\hbar = 1.055*10^{-34} J\cdot s\) &ensp;&emsp;
+                    Boltzmann Constant:&emsp;\(k = 1.381*10^{-23} {J \over K}\)<br>
+                    Sun Mass:&emsp;\(1 M☉ = 1.989 * 10^{30} kg\) &ensp;&emsp;
+                    Sun Radius:&emsp;\(1 R☉ = 695700 km\) (\(432288 mi\))
+                </p>
+            </div>
+        </div>
+
+        <script>
+            var img_back = new Image();
+            var c_back = document.getElementById("c_back");
+            var ctx_back = c_back.getContext("2d");
+
+            var c0 = document.getElementById("c0");
+            var ctx0 = c0.getContext("2d");
+
+            var c_text = document.getElementById("c_text");
+            var ctx_text = c_text.getContext("2d");
+
+            ctx_text.font = "bold 16px Arial";
+            ctx_text.fillStyle = "white";
+
+            img_back.src = 'star-background.jpg';
+
+            var img_sm = new Image();
+            img_sm.src = 'smbh.png';
+            var img_inter = new Image();
+            img_inter.src = 'interbh.jpg';
+            var img_stellar = new Image();
+            img_stellar.src = 'stellarbh.png';
+
+            shadBlue = "0px 0px 10px teal";
+            noShad = "none";
+
+
+            const c = 299792458; //Speed of light m/s
+	        const G = 6.67408*Math.pow(10, -11); //Graviational constant m^3/(kg*s^2)
+            const hBar = 1.0545718*Math.pow(10, -34); //Plank's constant / 2*pi
+            const k = 1.38064852*Math.pow(10, -23);
+            const sb = 5.6704*Math.pow(10, -8);//Boltzmann constant
+            const KS = 1361; //Solar constant W/m^2
+            const piSquared = Math.pow(Math.PI, 2);
+
+            var wh = 550;
+
+            var mass;
+            var radius;
+            var temp;
+            var gravity;
+            var life;
+            var sMass;
+            var orbitRad;
+            var period;
+            var distance;
+            var parallax;
+
+            var massFull = false;
+            var radiusFull = false;
+            var tempFull = false;
+            var gravityFull = false;
+            var lifeFull = false;
+            var sMassFull = false;
+            var orbitRadFull = false;
+            var periodFull = false;
+            var distanceFull = false;
+            var parallaxFull = false;
+
+            var types = [];
+            types.push({name: "Stellar", image: img_stellar, minM: 3, maxM: 60});
+            types.push({name: "Intermediate", image: img_inter, minM: 60, maxM: 50000});
+            types.push({name: "Supermassive", image: img_sm, minM: 50000, maxM: 40E9});
+
+            var lights = [];
+            lights.push({name: "massLights", list: [{id: "sMassTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"},
+                    {id: "periodTxt", col: "#A31621"}, {id: "radiusTxt", col: "#D58936"}, {id: "tempTxt", col: "#240115"},
+                    {id: "gravityTxt", col: "#0000FF"}, {id: "lifeTxt", col: "#FF0000"}]});
+            lights.push({name: "radiusLights", list: [{id: "massTxt", col: "#A31621"}]});
+            lights.push({name: "tempLights", list: [{id: "massTxt", col: "#A31621"}]});
+            lights.push({name: "gravityLights", list: [{id: "massTxt", col: "#A31621"}]});
+            lights.push({name: "lifeLights", list: [{id: "massTxt", col: "#A31621"}]});
+            lights.push({name: "sMassLights", list: [{id: "massTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"},
+                    {id: "periodTxt", col: "#A31621"}]});
+            lights.push({name: "orbitRadLights", list: [{id: "massTxt", col: "#A31621"}, {id: "sMassTxt", col: "#A31621"},
+                    {id: "periodTxt", col: "#A31621"}]});
+            lights.push({name: "periodLights", list: [{id: "massTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"},
+                    {id: "sMassTxt", col: "#A31621"}]});
+            lights.push({name: "distanceLights", list: [{id: "parallaxTxt", col: "#A31621"}]});
+            lights.push({name: "parallaxLights", list: [{id: "distanceTxt", col: "#A31621"}]});
+
+            var blues = [{id: "massTxt", blue: false}, {id: "radiusTxt", blue: false}, {id: "tempTxt", blue: false}, {id: "gravityTxt", blue: false},
+                    {id: "lifeTxt", blue: false}, {id: "sMassTxt", blue: false}, {id: "orbitRadTxt", blue: false}, {id: "periodTxt", blue: false},
+                    {id: "distanceTxt", blue: false}, {id: "parallaxTxt", blue: false}];
+
+            var drawType = types[0];
+            var previousType = drawType;
+
+            function drawBH(type) {
+                ctx_text.clearRect(0, 0, wh, 150);
+                if (massFull) {
+                    ctx_text.fillText("Type:  " + type.name, 30, 30);
+                } else {
+                    ctx_text.fillText("Type:  Unknown", 30, 30);
+                }
+                ctx0.clearRect(0,0,wh,wh);
+
+                var img_op = 0;
+                var loopNum = 0;
+                if (drawType != previousType) {
+                    var id = setInterval(frame, 5);
+                    function frame() {
+                        if (img_op == 1) {
+                            clearInterval(id);
+                        } else {
+                            img_op = .01*loopNum;
+                            loopNum++;
+                            ctx0.clearRect(0, 0, wh, wh);
+                            ctx0.globalAlpha = img_op;
+                            ctx0.drawImage(type.image, 0, 0, wh, wh);
+                        }
+                    }
+                } else {
+                    ctx0.drawImage(type.image, 0, 0, wh, wh);
+                }
+            }
+
+            function reset() {
+                document.getElementById("massTxt").value = "";
+        		document.getElementById("radiusTxt").value = "";
+                document.getElementById("tempTxt").value = "";
+                document.getElementById("gravityTxt").value = "";
+                document.getElementById("lifeTxt").value = "";
+                document.getElementById("sMassTxt").value = "";
+                document.getElementById("orbitRadTxt").value = "";
+                document.getElementById("periodTxt").value = "";
+                document.getElementById("distanceTxt").value = "";
+                document.getElementById("parallaxTxt").value = "";
+
+                document.getElementById("massTxt").style.boxShadow = noShad;
+        		document.getElementById("radiusTxt").style.boxShadow = noShad;
+                document.getElementById("tempTxt").style.boxShadow = noShad;
+                document.getElementById("gravityTxt").style.boxShadow = noShad;
+                document.getElementById("lifeTxt").style.boxShadow = noShad;
+                document.getElementById("sMassTxt").style.boxShadow = noShad;
+                document.getElementById("orbitRadTxt").style.boxShadow = noShad;
+                document.getElementById("periodTxt").style.boxShadow = noShad;
+                document.getElementById("distanceTxt").style.boxShadow = noShad;
+                document.getElementById("parallaxTxt").style.boxShadow = noShad;
+
+                calculate();
+            }
+
+            function calculate() {
+                mass = document.getElementById("massTxt").value;
+                radius = document.getElementById("radiusTxt").value;
+                temp = document.getElementById("tempTxt").value;
+                gravity = document.getElementById("gravityTxt").value;
+                life = document.getElementById("lifeTxt").value;
+                sMass = document.getElementById("sMassTxt").value;
+                orbitRad = document.getElementById("orbitRadTxt").value;
+                period = document.getElementById("periodTxt").value;
+                distance = document.getElementById("distanceTxt").value;
+                parallax = document.getElementById("parallaxTxt").value;
+
+                (document.getElementById("massTxt").value === "") ? massFull = false : massFull = true;
+                (document.getElementById("radiusTxt").value === "") ? radiusFull = false : radiusFull = true;
+                (document.getElementById("tempTxt").value === "") ? tempFull = false : tempFull = true;
+                (document.getElementById("gravityTxt").value === "") ? gravityFull = false : gravityFull = true;
+                (document.getElementById("lifeTxt").value === "") ? lifeFull = false : lifeFull = true;
+                (document.getElementById("sMassTxt").value === "") ? sMassFull = false : sMassFull = true;
+                (document.getElementById("orbitRadTxt").value === "") ? orbitRadFull = false : orbitRadFull = true;
+                (document.getElementById("periodTxt").value === "") ? periodFull = false : periodFull = true;
+                (document.getElementById("distanceTxt").value === "") ? distanceFull = false : distanceFull = true;
+                (document.getElementById("parallaxTxt").value === "") ? parallaxFull = false : parallaxFull = true;
+
+                for (i=0; i<blues.length; i++) {
+                    blues[i].blue = false;
+                }
+
+        		//Calling all of the methods that do the calculations
+                massCalc();
+        		radiusCalc();
+        		tempCalc();
+                gravityCalc();
+                lifeCalc();
+                sMassCalc();
+                orbitRadCalc();
+                periodCalc();
+        		parallaxCalc();
+        		distanceCalc();
+
+                updateBH();
+        	}
+
+            function massCalc() {
+                //Calculating the mass of the planet using different equations, based on what information is available
+                if (!massFull && ((sMassFull && periodFull && orbitRadFull) || radiusFull || tempFull || gravityFull || lifeFull)) {
+                    if (sMassFull && periodFull && orbitRadFull) {
+                        mass = toSM((4*piSquared*Math.pow(AUtoM(orbitRad), 3))/(G*Math.pow(toSec(period), 2))) - parseFloat(sMass);
+
+                    } else if (radiusFull) {
+                        mass = radius/3;
+
+                    } else if (tempFull) {
+                        mass = (Math.pow(c, 3)*hBar)/(8*k*Math.PI*G*(temp));
+
+                    } else if (gravityFull) {
+                        mass = toSM(Math.pow(c, 4)/(4*G*gravity));
+
+                    } else if (lifeFull) {
+                        mass = toSM(Math.cbrt((hBar*Math.pow(c, 4)*toSec(life)/(5120*Math.PI*Math.pow(G, 2)))));
+                    }
+
+                    document.getElementById("massTxt").value = sigfig(mass);
+                    document.getElementById("massTxt").style.boxShadow = shadBlue;
+                    massFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "massTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("massTxt").style.boxShadow = noShad;
+                }
+        	}
+
+            function radiusCalc() {
+                //Calculating the radius using different equations, based on what information is available
+                if (!radiusFull && massFull) {
+                    radius = (3*mass);
+
+                    document.getElementById("radiusTxt").value = sigfig(radius);
+                    document.getElementById("radiusTxt").style.boxShadow = shadBlue;
+                    radiusFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "radiusTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("radiusTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function tempCalc() {
+                //Calculating the temperature using different equations, based on what information is available
+                if (!tempFull && massFull) {
+                    temp = ((Math.pow(c, 3)*hBar)/(8*k*Math.PI*G*toKG(mass)));
+
+                    document.getElementById("tempTxt").value = sigfig(temp);
+                    document.getElementById("tempTxt").style.boxShadow = shadBlue;
+                    tempFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "tempTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("tempTxt").style.boxShadow = noShad;
+                }
+    		}
+
+            function gravityCalc() {
+                //Calculating the temperature using different equations, based on what information is available
+                if (!gravityFull && massFull) {
+                    gravity = (Math.pow(c, 4)/(4*G*toKG(mass)));
+
+                    document.getElementById("gravityTxt").value = sigfig(gravity);
+                    document.getElementById("gravityTxt").style.boxShadow = shadBlue;
+                    gravityFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "gravityTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("gravityTxt").style.boxShadow = noShad;
+                }
+    		}
+
+            function lifeCalc() {
+                //Calculating the distance to earth using different equations, based on what information is available
+        		//Parallax angle
+        		if (!lifeFull && massFull) {
+
+                    life = (toYears((5120*Math.PI*Math.pow(G, 2)*Math.pow(toKG(mass), 3))/(hBar*Math.pow(c, 4))));
+
+                    document.getElementById("lifeTxt").value = sigfig(life);
+                    document.getElementById("lifeTxt").style.boxShadow = shadBlue;
+                    lifeFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "lifeTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("lifeTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function sMassCalc() {
+                //Calculating the star's mass using different equations, based on what information is available
+                if (!sMassFull && (massFull && orbitRadFull && periodFull)) {
+                    sMass = (toSM((4*piSquared*Math.pow(AUtoM(orbitRad), 3))/(G*Math.pow(toSec(period), 2))) - parseFloat(mass));
+
+                    if (mass < 50000 || sMass > 0) {
+                        document.getElementById("sMassTxt").value = sigfig(sMass);
+                        document.getElementById("sMassTxt").style.boxShadow = shadBlue;
+                        sMassFull = true;
+
+                        for (i=0; i<blues.length; i++) {
+                            if (blues[i].id == "sMassTxt") {
+                                blues[i].blue = true;
+                            }
+                        }
+                    }
+                } else {
+                    document.getElementById("sMassTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function orbitRadCalc() {
+                //Calculating the orbital radius using different equations, based on what information is available
+                if (!orbitRadFull && (massFull && sMassFull && periodFull)) {
+                    orbitRad = MtoAU(Math.cbrt((G*toKG(parseFloat(mass) + parseFloat(sMass))*Math.pow(toSec(period), 2))/(4*piSquared)));
+
+                    document.getElementById("orbitRadTxt").value = sigfig(orbitRad);
+                    document.getElementById("orbitRadTxt").style.boxShadow = shadBlue;
+                    orbitRadFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "orbitRadTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("orbitRadTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function periodCalc() {
+                //Calculating the density using different equations, based on what information is available
+                if (!periodFull && (massFull && sMassFull && orbitRadFull)) {
+                    period = toYears(Math.pow((4*piSquared*Math.pow(AUtoM(orbitRad), 3))/(G*toKG(parseFloat(mass) + parseFloat(sMass))), .5));
+
+                    document.getElementById("periodTxt").value = sigfig(period);
+                    document.getElementById("periodTxt").style.boxShadow = shadBlue;
+                    periodFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "periodTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+                } else {
+                    document.getElementById("periodTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function distanceCalc() {
+                //Calculating the distance to earth using different equations, based on what information is available
+        		//Parallax angle
+        		if (!distanceFull && parallaxFull) {
+        			distance = ((1/parallax)*3.26156);
+
+                    document.getElementById("distanceTxt").value = sigfig(distance);
+                    document.getElementById("distanceTxt").style.boxShadow = shadBlue;
+                    distanceFull = true;
+                    // tooltipClear("distanceTxt");
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "distanceTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("distanceTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function parallaxCalc() {
+                //Calculating the distance to earth using different equations, based on what information is available
+        		//Parallax angle
+        		if (!parallaxFull && distanceFull) {
+
+                    parallax = 1/(distance/3.26156);
+
+                    document.getElementById("parallaxTxt").value = sigfig(parallax);
+                    document.getElementById("parallaxTxt").style.boxShadow = shadBlue;
+                    parallaxFull = true;
+
+                    for (i=0; i<blues.length; i++) {
+                        if (blues[i].id == "parallaxTxt") {
+                            blues[i].blue = true;
+                        }
+                    }
+        		} else {
+                    document.getElementById("parallaxTxt").style.boxShadow = noShad;
+                }
+            }
+
+            function updateBH() {
+                previousType = drawType;
+                drawType = types[0];
+
+                if (massFull) {
+                    for (i=0; i<types.length; i++) {
+                        if (types[i].minM <= mass && types[i].maxM > mass) {
+                            drawType = types[i];
+                        }
+                    }
+                    if (mass > types[2].maxM) {
+                        drawType = {name: "Not Possible (too massive)", image: img_sm};
+                    } else if (mass < types[0].minM) {
+                        drawType = {name: "Not Possible (not massive enough)", image: img_stellar};
+                        error = true;
+                    }
+                }
+
+                drawBH(drawType);
+            }
+
+            function noShadow(element) {
+                element.style.boxShadow = noShad;
+                var txtBox = element.id.substring(0, element.id.length-3) + "Txt";
+
+                for (i=0; i<blues.length; i++) {
+                    if (blues[i].id == txtBox) {
+                        blues[i].blue = false;
+                    }
+                }
+            }
+
+            function lightUp(element) {
+                var lightList = [];
+                var character = element.id.substring(0, element.id.length-3);
+                var lightListName = character + "Lights";
+                var suggestId = character + "Suggest";
+                var explainId = character + "Ex";
+
+                var ex_h = 0;
+                var ex_op = 0;
+                var loopNum = 0;
+                var id = setInterval(frame, 0);
+                document.getElementById(explainId).style.border = "3px solid white";
+                document.getElementById(explainId).style.borderRadius = "10px";
+                document.getElementById(explainId).children[0].style.opacity = 1;
+                function frame() {
+                    if (ex_h == 40) {
+                        if (ex_op == 1) {
+                            clearInterval(id);
+                        } else {
+                            ex_op = .02*loopNum;
+                            loopNum++;
+                            document.getElementById(explainId).style.opacity = ex_op;
+                        }
+                    } else {
+                        ex_h += 8;
+                        document.getElementById(explainId).style.height = ex_h + "px";
+                        document.getElementById(explainId).style.padding = ex_h/2 + "px";
+                    }
+                }
+
+                for (i=0; i<lights.length; i++) {
+                    if (lights[i].name == lightListName) {
+                        lightList = lights[i].list;
+                    }
+                }
+
+                for (i=0; i < lightList.length; i++) {
+                    document.getElementById(lightList[i].id).style.boxShadow = "0px 0px 10px " + lightList[i].col;
+                    if (lightList[i].bor != null) {
+                        document.getElementById(lightList[i].id).style.boxShadow = "-3px -3px 10px " + lightList[i].col +
+                                ", 3px 3px 10px " + lightList[i].bor;
+                    }
+                }
+
+                document.getElementById(suggestId).style.visibility = "visible";
+            }
+
+            function lightDown(element) {
+                var lightList = [];
+                var character = element.id.substring(0, element.id.length-3);
+                var lightListName = character + "Lights";
+                var suggestId = character + "Suggest";
+                var explainId = character + "Ex";
+
+                document.getElementById(explainId).children[0].style.opacity = 0;
+                var ex_h = 40;
+                var ex_op = 1;
+                var loopNum = 0;
+                var id = setInterval(frame, 0);
+                document.getElementById(explainId).style.border = "0px";
+                function frame() {
+                    if (ex_op == 0) {
+                        if(ex_h == 0) {
+                            clearInterval(id);
+                        } else {
+                            ex_h -= 8;
+                            document.getElementById(explainId).style.height = ex_h + "px";
+                            document.getElementById(explainId).style.padding = ex_h/2 + "px";
+                        }
+                    } else {
+                        ex_op = .02*loopNum;
+                        loopNum++;
+                        document.getElementById(explainId).style.opacity = ex_op;
+                    }
+                }
+
+                for (i=0; i<lights.length; i++) {
+                    if (lights[i].name == lightListName) {
+                        lightList = lights[i].list;
+                    }
+                }
+
+                for (i=0; i < lightList.length; i++) {
+                    for (j=0; j<blues.length; j++) {
+                        if (lightList[i].id == blues[j].id) {
+                            if (blues[j].blue) {
+                                document.getElementById(lightList[i].id).style.boxShadow = shadBlue;
+                            } else {
+                                document.getElementById(lightList[i].id).style.boxShadow = noShad;
+                            }
+                        }
+                    }
+                }
+
+                document.getElementById(suggestId).style.visibility = "hidden";
+            }
+
+            //Method to convert solar masses to kilograms
+        	function toKG(SM) {
+        		return SM*2*Math.pow(10, 30);
+        	}
+
+        	//Method to convert kilograms to solar masses
+        	function toSM(KG) {
+        		return KG/(1.98847*Math.pow(10, 30));
+        	}
+
+        	//Method to convert years to seconds
+        	function toSec(years) {
+        		return years*31536000;
+        	}
+
+        	//Method to convert seconds to years
+        	function toYears(sec) {
+        		return sec/31536000;
+        	}
+
+        	//Method to convert AU to meters
+        	function AUtoM(AU) {
+        		return AU*1.49597870691*Math.pow(10, 11);
+        	}
+
+        	//Method to convert meters to AU
+        	function MtoAU(m) {
+        		return m*6.684587122671*Math.pow(10, -12);
+        	}
+
+            //Writes everything with sig figs
+            function sigfig(num) {
+                if (Math.abs(num) < 0.01) {
+                    return num.toExponential(2);
+                } else if (Math.abs(num) < 0.1) {
+                    return num.toFixed(4);
+                } else if (Math.abs(num) < 1) {
+                    return num.toFixed(3);
+                } else if (Math.abs(num) < 10) {
+                    return num.toFixed(2);
+                } else if (Math.abs(num) < 100) {
+                    return num.toFixed(1);
+                } else if (Math.abs(num) < 1000) {
+                    return Math.round(num);
+                } else if (Math.abs(num) < 10000) {
+                    return Math.round(num/10)*10;
+                } else if (Math.abs(num) < 100000) {
+                    return Math.round(num/100)*100;
+                } else if (Math.abs(num) < 1000000) {
+                    return Math.round(num/1000)*1000;
+                } else {
+                    return num.toExponential(2);
+                }
+            }
+        </script>
+    </body>
+</html>
