@@ -16,9 +16,6 @@
         <div class="container-fluid">
             <div class="row form-group heading">
                 <div class="col-md-3 col-sm-12">
-                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
-                </div>
-                <div class="col-md-3 col-sm-12">
                     <a href="planet_calc.html"><button type="button" class="btn btn-outline-light btn-block">Planet Calculations</button></a>
                 </div>
                 <div class="col-md-3 col-sm-12">
@@ -26,6 +23,9 @@
                 </div>
                 <div class="col-md-3 col-sm-12">
                     <a href="black_hole_calc.html"><button type="button" class="btn btn-outline-light btn-block">Black Hole Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
                 </div>
             </div>
         </div>
@@ -90,11 +90,11 @@
                 </div>
                 <p>
                     Surface Gravity&emsp;
-                    <input type='number' min="3000" step="any" id='gravityTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> m/s<sup>2</sup>
-                    <i id='gravitySuggest'>&ensp;400 - 4e12 m/s<sup>2</sup></i>
+                    <input type='number' min="3000" step="any" id='gravityTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> m/s²
+                    <i id='gravitySuggest'>&ensp;400 - 4e12 m/s²</i>
                 </p>
                 <div class="expand" id="gravityEx" style="background-color: #FFFFFFAA;">
-                    <p>Acceleration seen at event horizon by distant observer&ensp;<strong>(Cygnus X-1 = 1.02e12m/s<sup>2</sup>)</strong></p>
+                    <p>Acceleration seen at event horizon by distant observer&ensp;<strong>(Cygnus X-1 = 1.02e12m/s²)</strong></p>
                 </div>
                 <p>
                     Lifetime&emsp;
@@ -183,7 +183,7 @@
                         <td>6.13e-13 - 6.13e-10</td>
                     </tr>
                     <tr>
-                        <th>Surface Gravity (m/s<sup>2</sup>)</th>
+                        <th>Surface Gravity (m/s²)</th>
                         <td>1.02e12</td>
                         <td>3.78e6</td>
                         <td>1.68e12</td>

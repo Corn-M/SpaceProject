@@ -16,9 +16,6 @@
         <div class="container-fluid">
             <div class="row form-group heading">
                 <div class="col-md-3 col-sm-12">
-                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
-                </div>
-                <div class="col-md-3 col-sm-12">
                     <a href="planet_calc.html"><button type="button" class="btn btn-outline-light btn-block">Planet Calculations</button></a>
                 </div>
                 <div class="col-md-3 col-sm-12">
@@ -26,6 +23,9 @@
                 </div>
                 <div class="col-md-3 col-sm-12">
                     <a href="black_hole_calc.html"><button type="button" class="btn btn-outline-light btn-block">Black Hole Calculations</button></a>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
                 </div>
             </div>
         </div>
@@ -85,20 +85,20 @@
                 <p>
                     <!-- <input type='checkbox' id='densityChk' style="width: auto;"> -->
                     Density&emsp;
-                    <input type='number' min="0" step="any" id='densityTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> g/cm<sup>3</sup>
-                    <i id='densitySuggest'>&ensp;0.5 - 6 g/cm<sup>3</sup></i>
+                    <input type='number' min="0" step="any" id='densityTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> g/cm³
+                    <i id='densitySuggest'>&ensp;0.5 - 6 g/cm³</i>
                 </p>
                 <div class="expand" id="densityEx" style="background-color: #FFFFFFAA;">
-                    <p>Mass/volume; Gas/ice giants are less dense&ensp;<strong>(Earth = 5.51g/cm<sup>3</sup> Jupiter = 1.33g/cm<sup>3</sup>)</strong></p>
+                    <p>Mass/volume; Gas/ice giants are less dense&ensp;<strong>(Earth = 5.51g/cm³ Jupiter = 1.33g/cm³)</strong></p>
                 </div>
                 <p>
                     <!-- <input type='checkbox' id='gravityChk' style="width: auto;"> -->
                     Surface Gravity&emsp;
-                    <input type='number' min="0" step="any" id='gravityTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> m/s<sup>2</sup>
-                    <i id='gravitySuggest'>&ensp;3 - 26 m/s<sup>2</sup></i>
+                    <input type='number' min="0" step="any" id='gravityTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> m/s²
+                    <i id='gravitySuggest'>&ensp;3 - 26 m/s²</i>
                 </p>
                 <div class="expand" id="gravityEx" style="background-color: #FFFFFFAA;">
-                    <p>How strong gravitational pull is on the surface&ensp;<strong>(Earth = 9.8m/s<sup>2</sup> Jupiter = 23.1m/s<sup>2</sup>)</strong></p>
+                    <p>How strong gravitational pull is on the surface&ensp;<strong>(Earth = 9.8m/s² Jupiter = 23.1m/s²)</strong></p>
                 </div>
                 <p>
                     <!-- <input type='checkbox' id='orbitRadSatChk' style="width: auto;"> -->
@@ -130,20 +130,20 @@
                 <p>
                     <!-- <input type='checkbox' id='sRadiusChk' style="width: auto;"> -->
                     Mass of Host Star&emsp;
-                    <input type='number' min="0" step="any" id='sMassTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> M&#9737;
-                    <i id='sMassSuggest'>&ensp;0.1 - 250 M&#9737;</i>
+                    <input type='number' min="0" step="any" id='sMassTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> M☉
+                    <i id='sMassSuggest'>&ensp;0.1 - 250 M☉</i>
                 </p>
                 <div class="expand" id="sMassEx" style="background-color: #FFFFFFAA;">
-                    <p>Mass of the host star compared to the sun&ensp;<strong>(Sun = 1M&#9737;)</strong></p>
+                    <p>Mass of the host star compared to the sun&ensp;<strong>(Sun = 1M☉)</strong></p>
                 </div>
                 <p>
                     <!-- <input type='checkbox' id='sRadiusChk' style="width: auto;"> -->
                     Radius of Host Star&emsp;
-                    <input type='number' min="0" step="any" id='sRadiusTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> R&#9737;
-                    <i id='sRadiusSuggest'>&ensp;0.05 - 100 R&#9737;</i>
+                    <input type='number' min="0" step="any" id='sRadiusTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> R☉
+                    <i id='sRadiusSuggest'>&ensp;0.05 - 100 R☉</i>
                 </p>
                 <div class="expand" id="sRadiusEx" style="background-color: #FFFFFFAA;">
-                    <p>Radius of the host star compared to the sun&ensp;<strong>(Sun = 1R&#9737;)</strong></p>
+                    <p>Radius of the host star compared to the sun&ensp;<strong>(Sun = 1R☉)</strong></p>
                 </div>
                 <p>
                     <!-- <input type='checkbox' id='sTempChk' style="width: auto;"> -->
@@ -251,7 +251,7 @@
                         <td>1.63</td>
                     </tr>
                     <tr>
-                        <th>Density (g/cm<sup>3</sup>)</th>
+                        <th>Density (g/cm³)</th>
                         <td>5.42</td>
                         <td>5.24</td>
                         <td>5.51</td>
@@ -263,7 +263,7 @@
                         <td>4.19</td>
                     </tr>
                     <tr>
-                        <th>Surface<br>Gravity (m/s<sup>2</sup>)</th>
+                        <th>Surface<br>Gravity (m/s²)</th>
                         <td>3.7</td>
                         <td>8.9</td>
                         <td>9.8</td>
@@ -311,7 +311,7 @@
                         <td>0.018%</td>
                     </tr>
                     <tr>
-                        <th>Star Mass (M&#9737;)</th>
+                        <th>Star Mass (M☉)</th>
                         <td>1</td>
                         <td>1</td>
                         <td>1</td>
@@ -323,7 +323,7 @@
                         <td>0.80</td>
                     </tr>
                     <tr>
-                        <th>Star Radius (R&#9737;)</th>
+                        <th>Star Radius (R☉)</th>
                         <td>1</td>
                         <td>1</td>
                         <td>1</td>
@@ -513,7 +513,7 @@
                         <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
                             <h4 class="bolded">Mass of Host Star (\(M\))</h4>
                             <p>The mass of the star that the planet orbits.</p>
-                            <p>The units are in M&#9737;, which means mass in relation to sun's mass.</p>
+                            <p>The units are in M☉, which means mass in relation to sun's mass.</p>
                             <br><p class="bolded">Equations:
                             \[M={4\pi^2 \over G}{{a_{p}}^3 \over P^2}\]<p class="small">Kepler’s Third Law</p>
                         </div>
@@ -522,7 +522,7 @@
                         <div class="holder sub-holder" style="background-color: #FFFFFFAA;">
                             <h4 class="bolded">Radius of Host Star (\(R\))</h4>
                             <p>The radius of the star that the planet orbits.</p>
-                            <p>The units are in R&#9737;, which means radius in relation to sun's radius.</p>
+                            <p>The units are in R☉, which means radius in relation to sun's radius.</p>
                             <br><p class="bolded">Equations:
                             \[R= {r \over \sqrt{D}}\]</p><p class="small">Transit Curve</p>
                             <p>\[R=2a_{p}({T \over {T_{s}} ({1 - a})^{1\over4}})^2\]</p><p class="small">Stefan-Boltzmann Law</p>
@@ -610,8 +610,8 @@
                             It's also described as the Goldilocks zone, because it's the perfect temperature, as it's not too hot
                             and not too cold</p>
                             <br><p class="bolded">Equations:
-                            \[a_{hz, inner} = 0.75 R ({T_{s} \over T_&#9737;})^2\]</p><p class="small">Stefan-Boltzmann Law</p>
-                            <p>\[a_{hz, outer} = 1.77 R ({T_{s} \over T_&#9737;})^2\]</p><p class="small">Stefan-Boltzmann Law</p>
+                            \[a_{hz, inner} = 0.75 R ({T_{s} \over T_☉})^2\]</p><p class="small">Stefan-Boltzmann Law</p>
+                            <p>\[a_{hz, outer} = 1.77 R ({T_{s} \over T_☉})^2\]</p><p class="small">Stefan-Boltzmann Law</p>
                         </div>
                     </div>
                 </div>
@@ -621,11 +621,11 @@
                 <h4 class="bolded">Constants</h4>
                 <p>
                     Gravitational Constant:&emsp;\(G = 6.674*10^{-11} {m^3\over{kg*s^2}}\) &ensp;&emsp;
-                    Temperature of the Sun:&emsp;\(T_&#9737; = 5778 K\)<br>
+                    Temperature of the Sun:&emsp;\(T_☉ = 5778 K\)<br>
                     Earth Mass:&emsp;\(1 M⊕ = 5.972 * 10^{24} kg\) &ensp;&emsp;
                     Earth Radius:&emsp;\(1 R⊕ = 6371 km\) (\(3959 mi\))<br>
-                    Sun Mass:&emsp;\(1 M&#9737; = 1.989 * 10^{30} kg\) &ensp;&emsp;
-                    Sun Radius:&emsp;\(1 R&#9737; = 695700 km\) (\(432288 mi\))
+                    Sun Mass:&emsp;\(1 M☉ = 1.989 * 10^{30} kg\) &ensp;&emsp;
+                    Sun Radius:&emsp;\(1 R☉ = 695700 km\) (\(432288 mi\))
                 </p>
             </div>
         </div>
