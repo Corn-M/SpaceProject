@@ -16,16 +16,16 @@
         <div class="container-fluid">
             <div class="row form-group heading">
                 <div class="col-md-3 col-sm-12">
-                    <a href="planet_calc.html"><button type="button" class="btn btn-outline-light btn-block">Planet Calculations</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()">Planet Calculations</button>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <a href="star_calc.html"><button type="button" class="btn btn-outline-light btn-block">Star Calculations</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()">Star Calculations</button>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <a href="black_hole_calc.html"><button type="button" class="btn btn-outline-light btn-block">Black Hole Calculations</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()">Black Hole Calculations</button>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()">Solar System Model</button>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                 <h3 class="center-col bolded">Enter information about your star</h3>
                 <p class="center-col" style="font-size: 14px;">
                     Enter some characteristics for your star and click calculate to see what your star might look like! The properties of the star
-		    associated with the ones you entered will be automatically calculated.
+		            associated with the ones you entered will be automatically calculated.
                 </p>
                 <p class="center-col" style="font-size: 14px;">
                     The groups of characteristics needed to calculate a property automatically are highlighted when you select it and suggested values
@@ -75,7 +75,7 @@
                 <p>
                     Radius&emsp;
                     <input type='number' min="0" step="any" id='radiusTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> R☉
-                    <i id='radiusSuggest'>&ensp;0.05 - 40 R☉</i>
+                    <i id='radiusSuggest'>&ensp;0.05 - 150 R☉</i>
                 </p>
                 <div class="expand" id="radiusEx" style="background-color: #FFFFFFAA;">
                     <p>Radius of the star compared to the sun&ensp;<strong>(Sun = 1R☉, Vega = 2.36R☉)</strong></p>
@@ -526,6 +526,19 @@
         </div>
 
         <script>
+            function to_planets() {
+             location.href = "planet_calc.html";
+            }
+            function to_stars() {
+             location.href = "star_calc.html";
+            }
+            function to_bhs() {
+             location.href = "black_hole_calc.html";
+            }
+            function to_solarsys() {
+             location.href = "planets.html";
+            }
+
             var img_back = new Image();
             var c_back = document.getElementById("c_back");
             var ctx_back = c_back.getContext("2d");
@@ -573,7 +586,7 @@
 
             ctx_line.font = "14px Arial";
 
-            shadBlue = "0px 0px 10px teal";
+            shadBlue = "0px 0px 10px 2px #4BBE64";
             noShad = "none";
 
 
@@ -641,20 +654,23 @@
             bolocorrects.push({bc: -1.2, min: 3500, max: 4100});
             bolocorrects.push({bc: -2.3, min: 2800, max: 3500});
 
+            // var highlight_cols = ["#A31621", "#D58936", "#240115"];
+            var highlight_cols = ["#F6315F", "#FFBC1F", "#0786B1"];
+
             var lights = [];
-            lights.push({name: "massLights", list: [{id: "luminTxt", col: "#A31621"}, {id: "lifeTxt", col: "#D58936"}]});
-            lights.push({name: "radiusLights", list: [{id: "tempTxt", col: "#A31621"}, {id: "luminTxt", col: "#A31621"}]});
-            lights.push({name: "luminLights", list: [{id: "tempTxt", col: "#A31621", bor: "#D58936"}, {id: "radiusTxt", col: "#A31621"},
-                    {id: "absmagTxt", col: "#D58936"}, {id: "massTxt", col: "#240115"}]});
-            lights.push({name: "absmagLights", list: [{id: "distanceTxt", col: "#A31621"}, {id: "obsmagTxt", col: "#A31621"},
-                    {id: "luminTxt", col: "#D58936"}, {id: "tempTxt", col: "#D58936"}]});
-            lights.push({name: "obsmagLights", list: [{id: "distanceTxt", col: "#A31621"}, {id: "absmagTxt", col: "#A31621"}]});
-            lights.push({name: "lifeLights", list: [{id: "massTxt", col: "#A31621"}]});
-            lights.push({name: "tempLights", list: [{id: "radiusTxt", col: "#A31621"}, {id: "luminTxt", col: "#A31621"}, {id: "waveTxt", col: "#D58936"}]});
-            lights.push({name: "waveLights", list: [{id: "tempTxt", col: "#A31621"}]});
-            lights.push({name: "distanceLights", list: [{id: "parallaxTxt", col: "#A31621"}, {id: "absmagTxt", col: "#D58936"},
-                {id: "obsmagTxt", col: "#D58936"}]});
-            lights.push({name: "parallaxLights", list: [{id: "distanceTxt", col: "#A31621"}]});
+            lights.push({name: "massLights", list: [{id: "luminTxt", col: highlight_cols[0]}, {id: "lifeTxt", col: highlight_cols[1]}]});
+            lights.push({name: "radiusLights", list: [{id: "tempTxt", col: highlight_cols[0]}, {id: "luminTxt", col: highlight_cols[0]}]});
+            lights.push({name: "luminLights", list: [{id: "tempTxt", col: highlight_cols[0], bor: highlight_cols[1]}, {id: "radiusTxt", col: highlight_cols[0]},
+                    {id: "absmagTxt", col: highlight_cols[1]}, {id: "massTxt", col: highlight_cols[2]}]});
+            lights.push({name: "absmagLights", list: [{id: "distanceTxt", col: highlight_cols[0]}, {id: "obsmagTxt", col: highlight_cols[0]},
+                    {id: "luminTxt", col: highlight_cols[1]}, {id: "tempTxt", col: highlight_cols[1]}]});
+            lights.push({name: "obsmagLights", list: [{id: "distanceTxt", col: highlight_cols[0]}, {id: "absmagTxt", col: highlight_cols[0]}]});
+            lights.push({name: "lifeLights", list: [{id: "massTxt", col: highlight_cols[0]}]});
+            lights.push({name: "tempLights", list: [{id: "radiusTxt", col: highlight_cols[0]}, {id: "luminTxt", col: highlight_cols[0]}, {id: "waveTxt", col: highlight_cols[1]}]});
+            lights.push({name: "waveLights", list: [{id: "tempTxt", col: highlight_cols[0]}]});
+            lights.push({name: "distanceLights", list: [{id: "parallaxTxt", col: highlight_cols[0]}, {id: "absmagTxt", col: highlight_cols[1]},
+                {id: "obsmagTxt", col: highlight_cols[1]}]});
+            lights.push({name: "parallaxLights", list: [{id: "distanceTxt", col: highlight_cols[0]}]});
 
             var blues = [{id: "massTxt", blue: false}, {id: "radiusTxt", blue: false}, {id: "luminTxt", blue: false}, {id: "absmagTxt", blue: false},
                     {id: "obsmagTxt", blue: false}, {id: "lifeTxt", blue: false}, {id: "tempTxt", blue: false}, {id: "waveTxt", blue: false},
@@ -1058,8 +1074,14 @@
                         whinSR = 5;
                     } else if (radius < 20) {
                         whinSR = 20;
+                    } else if (radius < 50) {
+                        whinSR = 50;
+                    } else if (radius < 100) {
+                        whinSR = 100;
+                    } else if (radius < 250) {
+                        whinSR = 250;
                     } else {
-                        whinSR = 40;
+                        whinSR = 1000;
                     }
                 }
 
@@ -1143,10 +1165,10 @@
                 }
 
                 for (i=0; i < lightList.length; i++) {
-                    document.getElementById(lightList[i].id).style.boxShadow = "0px 0px 10px " + lightList[i].col;
+                    document.getElementById(lightList[i].id).style.boxShadow = "0px 0px 10px 2px " + lightList[i].col;
                     if (lightList[i].bor != null) {
-                        document.getElementById(lightList[i].id).style.boxShadow = "-3px -3px 10px " + lightList[i].col +
-                                ", 3px 3px 10px " + lightList[i].bor;
+                        document.getElementById(lightList[i].id).style.boxShadow = "-3px -3px 10px 2px " + lightList[i].col +
+                                ", 3px 3px 10px 2px " + lightList[i].bor;
                     }
                 }
 
