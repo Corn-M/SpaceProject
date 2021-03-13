@@ -16,16 +16,16 @@
         <div class="container-fluid">
             <div class="row form-group heading">
                 <div class="col-md-3 col-sm-12">
-                    <a href="planet_calc.html"><button type="button" class="btn btn-outline-light btn-block">Planet Calculations</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()">Planet Calculations</button>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <a href="star_calc.html"><button type="button" class="btn btn-outline-light btn-block">Star Calculations</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()">Star Calculations</button>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <a href="black_hole_calc.html"><button type="button" class="btn btn-outline-light btn-block">Black Hole Calculations</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()">Black Hole Calculations</button>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()">Solar System Model</button>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                 <h3 class="center-col bolded">Enter information about your planet</h3>
                 <p class="center-col" style="font-size: 14px;">
                     Enter some characteristics for your planet and click calculate to see what your planet might look like! The properties of the planet
-		    associated with the ones you entered will be automatically calculated.
+		            associated with the ones you entered will be automatically calculated.
                 </p>
                 <p class="center-col" style="font-size: 14px;">
                     The groups of characteristics needed to calculate a property automatically are highlighted when you select it and suggested values
@@ -631,6 +631,20 @@
         </div>
 
         <script>
+            function to_planets() {
+             location.href = "planet_calc.html";
+            }
+            function to_stars() {
+             location.href = "star_calc.html";
+            }
+            function to_bhs() {
+             location.href = "black_hole_calc.html";
+            }
+            function to_solarsys() {
+             location.href = "planets.html";
+            }
+
+
             var img_back = new Image();
             var c_back = document.getElementById("c_back");
             var ctx_back = c_back.getContext("2d");
@@ -682,7 +696,7 @@
 
             ctx_line.font = "14px Arial";
 
-            shadBlue = "0px 0px 10px teal";
+            shadBlue = "0px 0px 10px 2px #4BBE64";
             noShad = "none";
 
 
@@ -732,30 +746,32 @@
             var distanceFull = false;
             var parallaxFull = false;
 
+            var highlight_cols = ["#F6315F", "#FFBC1F", "#0786B1"];
+
             var lights = [];
-            lights.push({name: "massLights", list: [{id: "radiusTxt", col: "#A31621", bor: "#D58936"}, {id: "gravityTxt", col: "#A31621"},
-                    {id: "densityTxt", col: "#D58936"}, {id: "periodSatTxt", col: "#240115"}, {id: "orbitRadSatTxt", col: "#240115"}]});
-            lights.push({name: "radiusLights", list: [{id: "massTxt", col: "#A31621", bor: "#D58936"}, {id: "gravityTxt", col: "#A31621"},
-                    {id: "densityTxt", col: "#D58936"}, {id: "sRadiusTxt", col: "#240115"}, {id: "brightDropTxt", col: "#240115"}]});
-            lights.push({name: "densityLights", list: [{id: "massTxt", col: "#A31621"}, {id: "radiusTxt", col: "#A31621"}]});
-            lights.push({name: "orbitRadSatLights", list: [{id: "massTxt", col: "#A31621"}, {id: "periodSatTxt", col: "#A31621"}]});
-            lights.push({name: "periodSatLights", list: [{id: "massTxt", col: "#A31621"}, {id: "orbitRadSatTxt", col: "#A31621"}]});
-            lights.push({name: "orbitRadLights", list: [{id: "sRadiusTxt", col: "#D58936"}, {id: "albedoTxt", col: "#D58936"}, {id: "tempTxt", col: "#D58936"},
-                    {id: "sTempTxt", col: "#D58936"}, {id: "sMassTxt", col: "#A31621"}, {id: "periodTxt", col: "#A31621"}]});
-            lights.push({name: "periodLights", list: [{id: "sMassTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}]});
-            lights.push({name: "tempLights", list: [{id: "sRadiusTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}, {id: "albedoTxt", col: "#A31621"},
-                {id: "sTempTxt", col: "#A31621"}]});
-            lights.push({name: "albedoLights", list: [{id: "sRadiusTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}, {id: "tempTxt", col: "#A31621"},
-                    {id: "sTempTxt", col: "#A31621"}]});
-            lights.push({name: "sTempLights", list: [{id: "sRadiusTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}, {id: "tempTxt", col: "#A31621"},
-                    {id: "albedoTxt", col: "#A31621"}]});
-            lights.push({name: "gravityLights", list: [{id: "massTxt", col: "#A31621"}, {id: "radiusTxt", col: "#A31621"}]});
-            lights.push({name: "sMassLights", list: [{id: "periodTxt", col: "#A31621"}, {id: "orbitRadTxt", col: "#A31621"}]});
-            lights.push({name: "sRadiusLights", list: [{id: "radiusTxt", col: "#A31621"}, {id: "brightDropTxt", col: "#A31621"}, {id: "albedoTxt", col: "#D58936"},
-                    {id: "orbitRadTxt", col: "#D58936"}, {id: "tempTxt", col: "#D58936"}, {id: "sTempTxt", col: "#D58936"}]});
-            lights.push({name: "brightDropLights", list: [{id: "radiusTxt", col: "#A31621"}, {id: "sRadiusTxt", col: "#A31621"}]});
-            lights.push({name: "distanceLights", list: [{id: "parallaxTxt", col: "#A31621"}]});
-            lights.push({name: "parallaxLights", list: [{id: "distanceTxt", col: "#A31621"}]});
+            lights.push({name: "massLights", list: [{id: "radiusTxt", col: highlight_cols[0], bor: highlight_cols[1]}, {id: "gravityTxt", col: highlight_cols[0]},
+                    {id: "densityTxt", col: highlight_cols[1]}, {id: "periodSatTxt", col: highlight_cols[2]}, {id: "orbitRadSatTxt", col: highlight_cols[2]}]});
+            lights.push({name: "radiusLights", list: [{id: "massTxt", col: highlight_cols[0], bor: highlight_cols[1]}, {id: "gravityTxt", col: highlight_cols[0]},
+                    {id: "densityTxt", col: highlight_cols[1]}, {id: "sRadiusTxt", col: highlight_cols[2]}, {id: "brightDropTxt", col: highlight_cols[2]}]});
+            lights.push({name: "densityLights", list: [{id: "massTxt", col: highlight_cols[0]}, {id: "radiusTxt", col: highlight_cols[0]}]});
+            lights.push({name: "orbitRadSatLights", list: [{id: "massTxt", col: highlight_cols[0]}, {id: "periodSatTxt", col: highlight_cols[0]}]});
+            lights.push({name: "periodSatLights", list: [{id: "massTxt", col: highlight_cols[0]}, {id: "orbitRadSatTxt", col: highlight_cols[0]}]});
+            lights.push({name: "orbitRadLights", list: [{id: "sRadiusTxt", col: highlight_cols[1]}, {id: "albedoTxt", col: highlight_cols[1]}, {id: "tempTxt", col: highlight_cols[1]},
+                    {id: "sTempTxt", col: highlight_cols[1]}, {id: "sMassTxt", col: highlight_cols[0]}, {id: "periodTxt", col: highlight_cols[0]}]});
+            lights.push({name: "periodLights", list: [{id: "sMassTxt", col: highlight_cols[0]}, {id: "orbitRadTxt", col: highlight_cols[0]}]});
+            lights.push({name: "tempLights", list: [{id: "sRadiusTxt", col: highlight_cols[0]}, {id: "orbitRadTxt", col: highlight_cols[0]}, {id: "albedoTxt", col: highlight_cols[0]},
+                {id: "sTempTxt", col: highlight_cols[0]}]});
+            lights.push({name: "albedoLights", list: [{id: "sRadiusTxt", col: highlight_cols[0]}, {id: "orbitRadTxt", col: highlight_cols[0]}, {id: "tempTxt", col: highlight_cols[0]},
+                    {id: "sTempTxt", col: highlight_cols[0]}]});
+            lights.push({name: "sTempLights", list: [{id: "sRadiusTxt", col: highlight_cols[0]}, {id: "orbitRadTxt", col: highlight_cols[0]}, {id: "tempTxt", col: highlight_cols[0]},
+                    {id: "albedoTxt", col: highlight_cols[0]}]});
+            lights.push({name: "gravityLights", list: [{id: "massTxt", col: highlight_cols[0]}, {id: "radiusTxt", col: highlight_cols[0]}]});
+            lights.push({name: "sMassLights", list: [{id: "periodTxt", col: highlight_cols[0]}, {id: "orbitRadTxt", col: highlight_cols[0]}]});
+            lights.push({name: "sRadiusLights", list: [{id: "radiusTxt", col: highlight_cols[0]}, {id: "brightDropTxt", col: highlight_cols[0]}, {id: "albedoTxt", col: highlight_cols[1]},
+                    {id: "orbitRadTxt", col: highlight_cols[1]}, {id: "tempTxt", col: highlight_cols[1]}, {id: "sTempTxt", col: highlight_cols[1]}]});
+            lights.push({name: "brightDropLights", list: [{id: "radiusTxt", col: highlight_cols[0]}, {id: "sRadiusTxt", col: highlight_cols[0]}]});
+            lights.push({name: "distanceLights", list: [{id: "parallaxTxt", col: highlight_cols[0]}]});
+            lights.push({name: "parallaxLights", list: [{id: "distanceTxt", col: highlight_cols[0]}]});
 
             var blues = [{id: "massTxt", blue: false}, {id: "radiusTxt", blue: false}, {id: "densityTxt", blue: false}, {id: "orbitRadSatTxt", blue: false},
                     {id: "periodSatTxt", blue: false}, {id: "orbitRadTxt", blue: false}, {id: "periodTxt", blue: false}, {id: "tempTxt", blue: false},
@@ -1420,10 +1436,10 @@
                 }
 
                 for (i=0; i < lightList.length; i++) {
-                    document.getElementById(lightList[i].id).style.boxShadow = "0px 0px 10px " + lightList[i].col;
+                    document.getElementById(lightList[i].id).style.boxShadow = "0px 0px 10px 2px " + lightList[i].col;
                     if (lightList[i].bor != null) {
-                        document.getElementById(lightList[i].id).style.boxShadow = "-3px -3px 10px " + lightList[i].col +
-                                ", 3px 3px 10px " + lightList[i].bor;
+                        document.getElementById(lightList[i].id).style.boxShadow = "-3px -3px 10px 2px " + lightList[i].col +
+                                ", 3px 3px 10px 2px " + lightList[i].bor;
                     }
                 }
 
