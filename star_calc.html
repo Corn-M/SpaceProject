@@ -81,6 +81,22 @@
                     <p>Radius of the star compared to the sun&ensp;<strong>(Sun = 1R☉, Vega = 2.36R☉)</strong></p>
                 </div>
                 <p>
+                    Temperature&emsp;
+                    <input type='number' min="3000" step="any" id='tempTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> K
+                    <i id='tempSuggest'>&ensp;2,400 - 45,000K</i>
+                </p>
+                <div class="expand" id="tempEx" style="background-color: #FFFFFFAA;">
+                    <p>Temperature of the star's surface&ensp;<strong>(Sun = 5,800K, Vega = 9,600K)</strong></p>
+                </div>
+                <p>
+                    Peak Wavelength&emsp;
+                    <input type='number' min="0" step="any" id='waveTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> nm
+                    <i id='waveSuggest'>&ensp;75 - 1,200 nm</i>
+                </p>
+                <div class="expand" id="waveEx" style="background-color: #FFFFFFAA;">
+                    <p>Wavelength where the star emits the most light&ensp;<strong>(Sun = 500nm, Vega = 300nm)</strong></p>
+                </div>
+                <p>
                     Luminosity&emsp;
                     <input type='number' min="0" step="any" id='luminTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> L☉
                     <i id='luminSuggest'>&ensp;0.005 - 100,000 L☉</i>
@@ -111,22 +127,6 @@
                 </p>
                 <div class="expand" id="lifeEx" style="background-color: #FFFFFFAA;">
                     <p>How long before the star will begin to die&ensp;<strong>(Sun = 10e9yrs, Vega = 1e9yrs)</strong></p>
-                </div>
-                <p>
-                    Temperature&emsp;
-                    <input type='number' min="3000" step="any" id='tempTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> K
-                    <i id='tempSuggest'>&ensp;2,400 - 45,000K</i>
-                </p>
-                <div class="expand" id="tempEx" style="background-color: #FFFFFFAA;">
-                    <p>Temperature of the star's surface&ensp;<strong>(Sun = 5,800K, Vega = 9,600K)</strong></p>
-                </div>
-                <p>
-                    Peak Wavelength&emsp;
-                    <input type='number' min="0" step="any" id='waveTxt' onchange="noShadow(this);" onfocus="lightUp(this);" onblur="lightDown(this);"> nm
-                    <i id='waveSuggest'>&ensp;75 - 1,200 nm</i>
-                </p>
-                <div class="expand" id="waveEx" style="background-color: #FFFFFFAA;">
-                    <p>Wavelength where the star emits the most light&ensp;<strong>(Sun = 500nm, Vega = 300nm)</strong></p>
                 </div>
                 <p>
                     Distance from Earth&emsp;
@@ -181,6 +181,26 @@
                         <td>0.154</td>
                     </tr>
                     <tr>
+                        <th>Temperature (K)</th>
+                        <td>33,000</td>
+                        <td>13,000</td>
+                        <td>9,602</td>
+                        <td>6,530</td>
+                        <td>5,778</td>
+                        <td>5,260</td>
+                        <td>3,042</td>
+                    </tr>
+                    <tr>
+                        <th>Peak Wavelength (nm)</th>
+                        <td>80</td>
+                        <td>220</td>
+                        <td>300</td>
+                        <td>445</td>
+                        <td>500</td>
+                        <td>550</td>
+                        <td>950</td>
+                    </tr>
+                    <tr>
                         <th>Luminosity (L☉)</th>
                         <td>45,700</td>
                         <td>182</td>
@@ -219,26 +239,6 @@
                         <td>10e9</td>
                         <td>13e9</td>
                         <td>5.5e12</td>
-                    </tr>
-                    <tr>
-                        <th>Temperature (K)</th>
-                        <td>33,000</td>
-                        <td>13,000</td>
-                        <td>9,602</td>
-                        <td>6,530</td>
-                        <td>5,778</td>
-                        <td>5,260</td>
-                        <td>3,042</td>
-                    </tr>
-                    <tr>
-                        <th>Peak Wavelength (nm)</th>
-                        <td>80</td>
-                        <td>220</td>
-                        <td>300</td>
-                        <td>445</td>
-                        <td>500</td>
-                        <td>550</td>
-                        <td>950</td>
                     </tr>
                     <tr>
                         <th>Distance (ly)</th>
