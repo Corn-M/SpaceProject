@@ -13,16 +13,16 @@
         <div class="container-fluid">
             <div class="row heading">
                 <div class="col-md-3 col-sm-12">
-                    <a href="planet_calc.html"><button type="button" class="btn btn-outline-light btn-block">Planet Calculations</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()">Planet Calculations</button>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <a href="star_calc.html"><button type="button" class="btn btn-outline-light btn-block">Star Calculations</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()">Star Calculations</button>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <a href="black_hole_calc.html"><button type="button" class="btn btn-outline-light btn-block">Black Hole Calculations</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()">Black Hole Calculations</button>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <a href="planets.html"><button type="button" class="btn btn-outline-light btn-block">Solar System Model</button></a>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()">Solar System Model</button>
                 </div>
             </div>
         </div>
@@ -134,6 +134,20 @@
 
 
         <script type="text/javascript">
+            function to_planets() {
+             location.href = "planet_calc.html";
+            }
+            function to_stars() {
+             location.href = "star_calc.html";
+            }
+            function to_bhs() {
+             location.href = "black_hole_calc.html";
+            }
+            function to_solarsys() {
+             location.href = "planets.html";
+            }
+
+
             const canvasSize = 650;
 
             var colors = [];
