@@ -3,7 +3,7 @@
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" href="stylesheet_planets.css">
-        <title>Planetary Calculations</title>
+        <title>Create a Planet</title>
 
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -12,24 +12,25 @@
     <body onload="drawPlanet(1, img_earth); calculate();">
         <header>
             <h1>Create Your Own Planet!</h1>
+            <p>Enter some information about your planet to see what it might look like!</p>
         </header>
 
         <div class="container-fluid">
             <div class="row heading">
                 <div class="col-md-2 col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_home()">Home</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_home()" style="font-size: 18px">Home</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()">Planet Calculations</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()" style="font-size: 18px">Create a Planet</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()">Star Calculations</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()" style="font-size: 18px">Create a Star</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()">Black Hole Calculations</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()" style="font-size: 18px">Create a Black Hole</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()">Solar System Model</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()" style="font-size: 18px">Solar System Model</button>
                 </div>
             </div>
         </div>
@@ -632,7 +633,7 @@
                     Sun Radius:&emsp;\(1 R☉ = 695700 km\) (\(432288 mi\))
                 </p>
 
-                <br><p style="font-size: 12px;">Created by Corin Marasco - Georgia Institute of Technology (Posted Aug. 2020)</p>
+                <br><p style="font-size: 12px;">Created by Corin Marasco (Posted Aug. 2020)</p>
 
             </div>
         </div>
