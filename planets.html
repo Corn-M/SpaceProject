@@ -3,30 +3,31 @@
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" href="stylesheet_planets.css">
-        <title>Planetary Model</title>
+        <title>Solar System Model</title>
         <meta name="google-site-verification" content="uiGHq8orU4v2p60qZF5TR7GhXXtN_ks-YNorCzOqpFI" />
     </head>
     <body onload='run(); init(); running=true;'>
         <header>
             <h1>Create Your Own Solar System!</h1>
+            <p>Build a solar system by adding unique planets and seeing how they move around a central star!</p>
         </header>
 
         <div class="container-fluid">
             <div class="row heading">
                 <div class="col-md-2 col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_home()">Home</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_home()" style="font-size: 18px">Home</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()">Planet Calculations</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()" style="font-size: 18px">Create a Planet</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()">Star Calculations</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()" style="font-size: 18px">Create a Star</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()">Black Hole Calculations</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()" style="font-size: 18px">Create a Black Hole</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()">Solar System Model</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()" style="font-size: 18px">Solar System Model</button>
                 </div>
             </div>
         </div>
@@ -134,7 +135,7 @@
                 <tr><td>Width/Height&emsp;<input type='number' id='wh' style="width: 80px;"  onchange='updateVal();' value=5> au</td></tr>
                 <tr><td>Plot Trajectory&emsp;<input type='checkbox' id='tra' onchange='updateVal();' checked></td></tr>
             </table>
-            <br><p style="font-size: 12px;">Created by Corin Marasco - Georgia Institute of Technology (Posted Aug. 2020)</p>
+            <br><p style="font-size: 12px;">Created by Corin Marasco (Posted Aug. 2020)</p>
         </div>
 
 
