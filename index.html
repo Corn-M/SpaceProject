@@ -3,30 +3,30 @@
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" href="stylesheet_planets.css">
-        <title>Home</title>
+        <title>AstroFun - Astrophysics Simulations</title>
         <meta name="google-site-verification" content="uiGHq8orU4v2p60qZF5TR7GhXXtN_ks-YNorCzOqpFI" />
     </head>
     <body onload='run(); init(); running=true;'>
         <header>
-            <h1>AstroFun</h1>
+            <h1>AstroFun - Astrophysics Simulations</h1>
         </header>
 
         <div class="container-fluid">
             <div class="row heading">
                 <div class="col-md-2 col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_home()">Home</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_home()" style="font-size: 18px">Home</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()">Planet Calculations</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()" style="font-size: 18px">Create a Planet</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()">Star Calculations</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()" style="font-size: 18px">Create a Star</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()">Black Hole Calculations</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()" style="font-size: 18px">Create a Black Hole</button>
                 </div>
                 <div class="col-md col-sm-12">
-                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()">Solar System Model</button>
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()" style="font-size: 18px">Solar System Model</button>
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
                 created to help people understand how astrophysical equations and properties affect the
                 characteristics and appearence of celestial objects and their interactions.<br><br>
 
-                The planet calculations, star calculations, and black hole calculations are for designing a respective
+                The Create a Planet, Create a Star, and Create a Black Hole tools are for designing a respective
                 celestial object by inputting just a few basic characteristics. After you input the known characteristics
                 of your object, click calculate to see what other characteristics can be calculated based on the
                 information provided! An approximation of what your planet, star, or black hole might look like is also
@@ -49,7 +49,8 @@
                 bodies.
             </p>
 
-            <h2 class="center-col bolded" style="padding-top: 25px;">How to Use the Calculations Tools</h2>
+            <h2 class="center-col bolded" style="padding-top: 25px;">How to Use the Create a Planet, Star, and Black
+                Hole Tools</h2>
             <p style="padding-left: 60px; padding-right: 60px; padding-top: 15px; font-size: 17px">
                 Enter any combination of characteristics you would like to see what planet, star, or black hole they
                 would create. All inputted characteristics must be within the ranges provided to the left of the
@@ -115,7 +116,7 @@
                 on the right. You can also turn off/on the lines displaying the trajectory of the planets.
             </p>
 
-            <br><p style="font-size: 12px;">Created by Corin Marasco - Georgia Institute of Technology (Posted Aug. 2020)</p>
+            <br><p style="font-size: 12px;">Created by Corin Marasco (Posted Aug. 2020)</p>
 
         </div>
 
