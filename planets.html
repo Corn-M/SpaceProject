@@ -13,16 +13,19 @@
 
         <div class="container-fluid">
             <div class="row heading">
-                <div class="col-md-3 col-sm-12">
+                <div class="col-md-2 col-sm-12">
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_home()">Home</button>
+                </div>
+                <div class="col-md col-sm-12">
                     <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()">Planet Calculations</button>
                 </div>
-                <div class="col-md-3 col-sm-12">
+                <div class="col-md col-sm-12">
                     <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()">Star Calculations</button>
                 </div>
-                <div class="col-md-3 col-sm-12">
+                <div class="col-md col-sm-12">
                     <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()">Black Hole Calculations</button>
                 </div>
-                <div class="col-md-3 col-sm-12">
+                <div class="col-md col-sm-12">
                     <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()">Solar System Model</button>
                 </div>
             </div>
@@ -136,17 +139,20 @@
 
 
         <script type="text/javascript">
+            function to_home() {
+                location.href = "index.html";
+            }
             function to_planets() {
-             location.href = "planet_calc.html";
+                location.href = "planet_calc.html";
             }
             function to_stars() {
-             location.href = "star_calc.html";
+                location.href = "star_calc.html";
             }
             function to_bhs() {
-             location.href = "black_hole_calc.html";
+                location.href = "black_hole_calc.html";
             }
             function to_solarsys() {
-             location.href = "planets.html";
+                location.href = "planets.html";
             }
 
 
