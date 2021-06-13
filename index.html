@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="stylesheet_planets.css">
+        <title>Home</title>
+        <meta name="google-site-verification" content="uiGHq8orU4v2p60qZF5TR7GhXXtN_ks-YNorCzOqpFI" />
+    </head>
+    <body onload='run(); init(); running=true;'>
+        <header>
+            <h1>Astrophysics Simulations</h1>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row heading">
+                <div class="col-md-2 col-sm-12">
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_home()">Home</button>
+                </div>
+                <div class="col-md col-sm-12">
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()">Planet Calculations</button>
+                </div>
+                <div class="col-md col-sm-12">
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()">Star Calculations</button>
+                </div>
+                <div class="col-md col-sm-12">
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()">Black Hole Calculations</button>
+                </div>
+                <div class="col-md col-sm-12">
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()">Solar System Model</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="holder" style="background-color: #FFFFFFCC; clear: both; margin: 50px;">
+            <h2 class="center-col bolded">Welcome!</h2>
+            <p style="padding-left: 60px; padding-right: 60px; padding-top: 15px; font-size: 17px">
+                This site contains various tools for anyone interested in astronomy/astrophysics to use. These were
+                created to help people understand how astrophysical equations and properties affect the
+                characteristics and appearence of celestial objects and their interactions.<br><br>
+
+                The planet calculations, star calculations, and black hole calculations are for designing a respective
+                celestial object by inputting just a few basic characteristics. After you input the known characteristics
+                of your object, click calculate to see what other characteristics can be calculated based on the
+                information provided! An approximation of what your planet, star, or black hole might look like is also
+                depicted.<br><br>
+
+                The solar system model is where you can create a solar system by adding planets and providing an initial
+                distance and velocity. This simulation exemplifies Kepler's laws and the elliptial shape of orbiting
+                bodies.
+            </p>
+
+            <h2 class="center-col bolded" style="padding-top: 25px;">How to Use the Calculations Tools</h2>
+            <p style="padding-left: 60px; padding-right: 60px; padding-top: 15px; font-size: 17px">
+                Enter any combination of characteristics you would like to see what planet, star, or black hole they
+                would create. All inputted characteristics must be within the ranges provided to the left of the
+                text field.
+            </p>
+            <div class="text-center">
+                <img src="mass_ex.png" class="rounded" style="max-width:30%; max-height:30%;"></img>
+                <p class="font-italic" style="padding-top: 5px; font-size: 15px">
+                    In this example, the inputted mass must be a number between 0.05 and 400.
+                </p>
+            </div>
+            <p style="padding-left: 60px; padding-right: 60px; padding-top: 10px; font-size: 17px">
+                When one text field is selected, other text fields will light up too. The text fields that are
+                highlighted are the ones needed to calculate the text field you have selected. So if you want
+                to calculate a specific characteristic, just select it to see what you need to input first.
+                When there is more than one way to calculate a characteristic, text fields will be highlighted
+                in different colors. Each color represents a separate way to calculate the characteristic, so
+                only the text fields highlighted with the same color must be inputted to find the desired
+                characteristic.
+            </p>
+            <div class="text-center">
+                <img src="boxes_ex.png" class="rounded" style="max-width:30%; max-height:30%;"></img>
+                <p class="font-italic" style="padding-top: 5px; font-size: 15px">
+                    In this example, to calculate luminosity, the user must input either radius and temperature,
+                    temperature and absolute visual magnitude, or mass.
+                </p>
+            </div>
+            <p style="padding-left: 60px; padding-right: 60px; padding-top: 10px; font-size: 17px">
+                Once you have inputted your characteristics, click calculate to calculate all the characteristics
+                possible based on the provided information and to render a picture of what your celestical object
+                might look like. To reset both the text fields and the picture, click reset! <br><br>
+
+                More information on realistic properties and definitions and equations for each characteristic are
+                provided in the notes section of these pages.
+            </p>
+
+            <h2 class="center-col bolded" style="padding-top: 25px;">How to Use the Solar System Model</h2>
+            <p style="padding-left: 60px; padding-right: 60px; padding-top: 15px; font-size: 17px">
+                Enter a starting velocity and customize your planet's color, then click anywhere on the black
+                area to the right to place your planet. Then, watch it orbit a Sun-like star! You can pause
+                and play the simulation by pushing the pause/play button, or reset the model to the original
+                Earth-Sun model with the reset button. Note that there is a limit of ten planets that can be
+                added to the model.<br><br>
+
+                More precise models can be created with the menu below. While the simulation is paused,
+                planets can be added or removed and the user can set a precise initial radius and velocity
+                for the planet. The mass of the star can also be changed. Be sure to initialize changes by
+                pressing the initialize button before hitting play.
+            </p>
+            <div class="text-center">
+                <img src="model_ex.png" class="rounded" style="max-width:30%; max-height:30%;"></img>
+                <p class="font-italic" style="padding-top: 5px; font-size: 15px">
+                    The layout for the menu of planets added by the user.
+                </p>
+            </div>
+            <p style="padding-left: 60px; padding-right: 60px; padding-top: 10px; font-size: 17px">
+                This menu also includes presets, which will input the planets of the solar system into the
+                model, including their velocities and orbital radii, which can then be adjusted. Just select
+                the preset you want and hit load. Note that the larger solar system models will run slowly at
+                first, but after some time, they should run more smoothly.<br><br>
+
+                Lastly, the dimensions of the window may be edited by just typing a new one into the text field
+                on the right. You can also turn off/on the lines displaying the trajectory of the planets.
+            </p>
+
+            <br><p style="font-size: 12px;">Created by Corin Marasco - Georgia Institute of Technology (Posted Aug. 2020)</p>
+
+        </div>
+
+
+        <script type="text/javascript">
+            function to_home() {
+             location.href = "index.html";
+            }
+            function to_planets() {
+             location.href = "planet_calc.html";
+            }
+            function to_stars() {
+             location.href = "star_calc.html";
+            }
+            function to_bhs() {
+             location.href = "black_hole_calc.html";
+            }
+            function to_solarsys() {
+             location.href = "planets.html";
+            }
+        </script>
+    </body>
+</html>
