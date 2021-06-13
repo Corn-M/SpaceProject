@@ -7,7 +7,7 @@
 
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-	<meta name="google-site-verification" content="uiGHq8orU4v2p60qZF5TR7GhXXtN_ks-YNorCzOqpFI" />
+        <meta name="google-site-verification" content="uiGHq8orU4v2p60qZF5TR7GhXXtN_ks-YNorCzOqpFI" />
     </head>
     <body onload="drawPlanet(1, img_earth); calculate();">
         <header>
@@ -15,17 +15,20 @@
         </header>
 
         <div class="container-fluid">
-            <div class="row form-group heading">
-                <div class="col-md-3 col-sm-12">
+            <div class="row heading">
+                <div class="col-md-2 col-sm-12">
+                    <button type="button" class="btn btn-outline-light btn-block" onclick="to_home()">Home</button>
+                </div>
+                <div class="col-md col-sm-12">
                     <button type="button" class="btn btn-outline-light btn-block" onclick="to_planets()">Planet Calculations</button>
                 </div>
-                <div class="col-md-3 col-sm-12">
+                <div class="col-md col-sm-12">
                     <button type="button" class="btn btn-outline-light btn-block" onclick="to_stars()">Star Calculations</button>
                 </div>
-                <div class="col-md-3 col-sm-12">
+                <div class="col-md col-sm-12">
                     <button type="button" class="btn btn-outline-light btn-block" onclick="to_bhs()">Black Hole Calculations</button>
                 </div>
-                <div class="col-md-3 col-sm-12">
+                <div class="col-md col-sm-12">
                     <button type="button" class="btn btn-outline-light btn-block" onclick="to_solarsys()">Solar System Model</button>
                 </div>
             </div>
@@ -628,22 +631,27 @@
                     Sun Mass:&emsp;\(1 M☉ = 1.989 * 10^{30} kg\) &ensp;&emsp;
                     Sun Radius:&emsp;\(1 R☉ = 695700 km\) (\(432288 mi\))
                 </p>
-		<br><p style="font-size: 12px;">Created by Corin Marasco - Georgia Institute of Technology (Posted Aug. 2020)</p>
+
+                <br><p style="font-size: 12px;">Created by Corin Marasco - Georgia Institute of Technology (Posted Aug. 2020)</p>
+
             </div>
         </div>
 
         <script>
+            function to_home() {
+                location.href = "index.html";
+            }
             function to_planets() {
-             location.href = "planet_calc.html";
+                location.href = "planet_calc.html";
             }
             function to_stars() {
-             location.href = "star_calc.html";
+                location.href = "star_calc.html";
             }
             function to_bhs() {
-             location.href = "black_hole_calc.html";
+                location.href = "black_hole_calc.html";
             }
             function to_solarsys() {
-             location.href = "planets.html";
+                location.href = "planets.html";
             }
 
 
