@@ -741,20 +741,20 @@
                         ctx.fillText('Time = ' + round(stoyrs(ttime)) + 'yrs', 10, 20);
                     }
 
-                    var t1 = performance.now();
-                    runTotal += (t1 - t0);
-                    runCount++;
-
-                    if (runCount == 10) {
-                        if ((runTotal/10 > 10) && skipVal > 1) {
-                            skipVal --;
-                        }
-                        if (runTotal/10 < .2) {
-                            skipVal ++;
-                        }
-                        runTotal = 0;
-                        runCount = 0;
-                    }
+                    // var t1 = performance.now();
+                    // runTotal += (t1 - t0);
+                    // runCount++;
+                    //
+                    // if (runCount == 10) {
+                    //     if ((runTotal/10 > 10) && skipVal > 1) {
+                    //         skipVal --;
+                    //     }
+                    //     if (runTotal/10 < .2) {
+                    //         skipVal ++;
+                    //     }
+                    //     runTotal = 0;
+                    //     runCount = 0;
+                    // }
                 } else if (disabled) {
                     for (var i = 0; i < pbxs.length; i++) {
                         document.getElementById(pbxs[i].vn).disabled = false;
