@@ -42,7 +42,7 @@ i {
 }
 
 .canvasHolderImage {
-    margin-right: 70px;
+    margin-right: 100px;
     margin-top: 20px;
     position: relative;
     height: 500px;
@@ -56,8 +56,8 @@ i {
 
 .planet-calc {
     margin-bottom: 40px;
-    margin-left: 20px;
-    width: 630px;
+    margin-left: 40px;
+    width: 670px;
 }
 
 .info {
@@ -128,7 +128,7 @@ body {
     margin-left: 100px;
 }
 .buttons {
-    width: 300px;
+    width: 275px;
     margin-top: 20px;
     margin-left: 150px;
 }
